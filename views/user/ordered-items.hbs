@@ -1,0 +1,66 @@
+<div class="container bg-light pt-5">
+<div class="card mt-5">
+    <div class="row ">
+        <div class="col-md-9 ">
+           <table class="mt-5 ms-5">
+               <tr>
+                   <td><p class="fw-bolder">Order Id:</p></td>
+                   <td><p>{{orders.orderId}}</p></td>
+               </tr>
+               <tr>
+                   <td><p class="fw-bolder">Ordered on:</p></td>
+                   <td><p>{{orders.time}}</p></td>
+               </tr>
+               <tr>
+                   <td><p class="fw-bolder">Status:</p></td>
+                   <td><p>{{orders.status}}</p></td>
+               </tr>
+               <tr>
+                   <td><p class="fw-bolder">Total Amount:</p></td>
+                   <td><p>Rs. {{orders.totalAmount}}</p></td>
+               </tr>
+               <tr>
+                   <td><p class="fw-bolder me-2">Mode of Payment:</p></td>
+                   <td><p>{{orders.modeOfPayment}}</p></td>
+                   
+               </tr>
+               
+              
+           </table>
+        </div>
+        <div class="col-md-3">
+            <table class="mt-4 ms-5">
+               <tr><td><p class="fw-bolder">Invoiced to</p></td></tr>
+              <tr>  <td><p class="mt-0 mb-0">{{userData.firstname}} {{userData.lastname}}</p></td></tr>
+              <tr><td>{{orders.deliveryDetails.house}},{{orders.deliveryDetails.city}}</td></tr>            
+              <tr><td>{{orders.deliveryDetails.pincode}}</td></tr>
+              <tr><td>{{userData.phonenumber}}</td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <p class="ms-5 fw-bolder text-center fs-2"> Products</p>
+                <th></th>
+                <th>Title</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                {{#each productDetails}}
+                <tr><td><img src="/images/productsImages/{{this.productId}}(1).jpg "height=100 width=100 alt="" class="ms-2 me-2"></td>
+                <td>{{this.title}}</td>
+                <td>{{this.size}}</td>
+                <td>{{this.quantity}}</td>
+                <td>Rs. {{this.total}}</td>
+                
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    
+    </div>
+    
+</div>
+</div>

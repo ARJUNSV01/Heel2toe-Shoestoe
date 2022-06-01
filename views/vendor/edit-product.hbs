@@ -1,0 +1,338 @@
+
+                <div class="d-flex justify-content-center">
+                    <h1 class=" mb-4  ">Edit a Product </h1>
+                    </div>
+                    <div class="container-fluid card shadow">
+
+
+  <div class="row">
+    <div class=" col-md-6 col-lg-4 mx-auto mt-5 mb-5 " onload="display()">
+      
+      <form action="/vendor/product/update/{{product.products._id}}" method="POST" enctype="multipart/form-data">
+
+        <table class="table table-borderless">
+          <tr>
+            <td>
+              <p class="opacity-75 ">Title</p>
+            </td>
+            <td>
+              <input type="text" class="form-control" name="title" value="{{product.products.title}}" required>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Brand</p>
+            </td>
+            <td>
+              <input type="text" class="form-control" name="brand"value="{{product.products.brand}}" aria-describedby="emailHelp">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Price</p>
+            </td>
+            <td>
+              <input type="number" class="form-control" name="price" value="{{product.products.price}}" min="0">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Discount(%)</p>
+            </td>
+            <td>
+              <input type="number" class="form-control" name="discount"value="{{product.products.discount}}" min="0" max="100" id="gender">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Gender</p>
+            </td>
+            <td>
+              <select id="g" onchange="show()" class="form-select opacity-75 " value="{{product.products.gender}}" aria-label="Default select example"
+                name="gender">
+                <option value="{{product.products.gender}}">{{product.products.gender}}</option>
+                <option value="men" name="men">Men</option>
+                <option value="women">Women</option>
+                <option value="kids">Kids</option>
+                {{!-- <option value="kids">Boys</option>
+                <option value="girls">Girls</option>
+                <option value="boysGirls">Boys & Girls</option> --}}
+              </select>
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Category</p>
+            </td>
+            <td>
+              <select class="form-select opacity-75 " name="category" aria-label="Default select example">
+                <option value="{{product.products.category}}">{{product.products.category}}</option>
+                <option value="shoes">Shoes</option>
+                <option value="sandals">Sandals</option>
+                <option value="flipflops">Flip-Flops</option>
+                <option value="boots">Boots</option>
+                <option value="loafers">Loafers</option>
+
+
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Occassion</p>
+            </td>
+            <td>
+              <select class="form-select opacity-75 " name="occassion" aria-label="Default select example">
+                <option {{product.products.occassion}}>{{product.products.occassion}}</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+                <option value="sports">Sports</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="opacity-75">Quantity</p>
+            </td>
+            <td>
+              <div id="preview">
+                <div class="row ">
+                  <div class="col-2  ">
+                    <input type="number" class="col-12">
+                  </div>
+                  <div class="col-2 ">
+                    <input type="text" class="col-12">
+                  </div>
+                  <div class="col-2  ">
+                    <input type="text" class="col-12">
+                  </div>
+                  <div class="col-2  ">
+                    <input type="text" class="col-12">
+                  </div>
+                  <div class="col-2  ">
+                    <input type="text" class="col-12">
+                  </div>
+                  <div class="col-2  ">
+                    <input type="text" class="col-12 ">
+                  </div>
+                </div>
+              </div>
+              <div id="adults" style="display:none;">
+                <div class="row">
+                  <div class="col-4  ">
+                    <input type="number" placeholder="" name="six" value="{{product.products.quantity.six}}" class="col-12">
+                  </div>
+                  <div class="col-4 ">
+                    <input type="number" placeholder="" name="seven" value="{{product.products.quantity.seven}}" class="col-12">
+                  </div>
+                  <div class="col-4  ">
+                    <input type="number" placeholder="8" name="eight"value="{{product.products.quantity.eight}}" class="col-12">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4  ">
+                    <input type="number" placeholder="9" name="nine"value="{{product.products.quantity.nine}}" class="col-12">
+                  </div>
+                  <div class="col-4  ">
+                    <input type="number" placeholder="10" name="ten"value="{{product.products.quantity.ten}}" class="col-12">
+                  </div>
+                  <div class="col-4  ">
+                    <input type="number" placeholder="11" name="eleven"value="{{product.products.quantity.eleven}}" class="col-12">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-4  ">
+                    <input type="number" placeholder="12" name="twelve"value="{{product.products.quantity.twelve}}" class="col-12">
+                  </div>
+                  <div class="col-4  ">
+                    <input type="number" placeholder="13" name="thirteen"value="{{product.products.quantity.thirteen}}" class="col-12">
+                  </div>
+                  <div class="col-4  ">
+                    <input type="number" placeholder="14" name="fourteen"value="{{product.products.quantity.fourteen}}" class="col-12">
+                  </div>
+                </div>
+              </div>
+
+
+    </div>
+    <div id="kids" style="display:none;">
+      <div class="row ">
+        <div class="col-4  ">
+          <input type="number" placeholder="3-4 Years" name="threetofour" value="{{product.products.quantity.threetofour}}" class="col-12">
+        </div>
+        <div class="col-4 ">
+          <input type="number" placeholder="4-5 Years" name="fourtofive" value="{{product.products.quantity.fourtofive}}" class="col-12">
+        </div>
+        <div class="col-4  ">
+          <input type="number" placeholder="5-6 Years" name="fivetosix" value="{{product.products.quantity.fivetosix}}" class="col-12">
+        </div>
+
+      </div>
+      <div class="row mt-3">
+
+        <div class="col-4  ">
+          <input type="number" placeholder="6-7 Years" name="sixtoseven" value="{{product.products.quantity.sixtoseven}}" class="col-12">
+        </div>
+        <div class="col-4  ">
+          <input type="number" placeholder="7-8 Years" name="seventoeight" value="{{product.products.quantity.seventoeight}}" class="col-12">
+        </div>
+        <div class="col-4  ">
+          <input type="number" placeholder="8-9 Years" name="eighttonine"value="{{product.products.quantity.eighttonine}}" class="col-12">
+        </div>
+      </div>
+    </div>
+  </div>
+  </td>
+  </tr>
+
+
+  </table>
+
+
+
+</div>
+<div class="col-md-6 mt-5 ">
+  {{!-- <h1 style="padding-left: 0.8em;" class="fs-2 text-warning mb-5 mt-5 ms-5">Add Images </h1> --}}
+  <div class="ms-5">
+    <h1 class="fs-2 text-warning mb-5 ms-5">Choose Images </h1>
+  </div>
+  <div class="row">
+
+    <div class="col-md-6 col-12">
+
+
+      <input type="file" accept="image/*" name="image1" id="imgfile" onchange="loadFile1(event) " value="">
+
+      <p><img src="/images/productsImages/{{product.products._id}}(1).jpg" id="img1" width="200" height="200" /></p>
+
+
+    </div>
+    <div class="col-md-6 col-12">
+
+
+      <input type="file" accept="image/*" name="image2" id="imgfile" onchange="loadFile2(event)">
+
+      <p><img src="/images/productsImages/{{product.products._id}}(2).jpg" id="img2" width="200" height="200"></p>
+    </div>
+
+
+  </div>
+  <div class="row">
+
+    <div class="col-md-6 col-12">
+
+
+      <input type="file" accept="image/*" name="image3" id="imgfile" onchange="loadFile3(event)">
+
+      <p><img src="/images/productsImages/{{product.products._id}}(3).jpg" id="img3" width="200" height="200" /></p>
+
+
+    </div>
+    <div class="col-md-6 col-12">
+
+
+      <input type="file" accept="image/*" name="image4" id="imgfile" onchange="loadFile4(event)">
+
+      <p><img src="/images/productsImages/{{product.products._id}}(4).jpg" id="img4" width="200" height="200"></p>
+    </div>
+
+
+  </div>
+
+  {{!-- <tr>
+    <td>
+      <p class="opacity-75">Select file:</p>
+    </td>
+    <td>
+      <input type="file" accept="image/*" name="image3" id="imgfile" onchange="loadFile3(event)">
+
+      <p><img id="img3" width="200" height="200" /></p>
+
+
+    </td>
+
+  </tr>
+  <tr>
+    <td>
+      <p class="opacity-75">Select file:</p>
+    </td>
+    <td>
+      <input type="file" accept="image/*" name="image4" id="imgfile" onchange="loadFile4(event)">
+
+      <p><img id="img4" width="200" height="200" /></p>
+
+
+    </td>
+
+  </tr>
+  </table> --}}
+
+</div>
+</div>
+<div class="row">
+  <div class="d-flex justify-content-center mt-5 mb-5 ">
+    <input class="btn btn-success " type="submit" value="UPDATE">
+    </form>
+  </div>
+</div>
+</div>
+{{!-- </div> --}}
+<footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+
+<script>
+
+
+  function show() {
+    let x = document.getElementById("g").value
+    let adults = document.getElementById('adults');
+    let kids = document.getElementById("kids");
+    let preview = document.getElementById("preview");
+
+
+    if (x == "kids") {
+      adults.style.display = 'none'
+      kids.style.display = 'block'
+      preview.style.display = 'none'
+
+    } else {
+      adults.style.display = 'block'
+      kids.style.display = 'none'
+      preview.style.display = 'none'
+
+    }
+    console.log(x)
+  }
+
+  var loadFile1 = function (event) {
+    const img = document.getElementById('img1')
+    img.src = URL.createObjectURL(event.target.files[0]);
+  };
+
+  var loadFile2 = function (event) {
+    const img = document.getElementById('img2')
+    img.src = URL.createObjectURL(event.target.files[0]);
+  };
+  var loadFile3 = function (event) {
+    const img = document.getElementById('img3')
+    img.src = URL.createObjectURL(event.target.files[0]);
+  };
+  var loadFile4 = function (event) {
+    const img = document.getElementById('img4')
+    img.src = URL.createObjectURL(event.target.files[0]);
+  };
+
+
+</script>
+
+
+   

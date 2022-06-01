@@ -1,0 +1,142 @@
+<body>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <section style="background-color: #eee;">
+        <div class="container pt-5 pb-2">
+         <div class="row">
+             <div class="col-lg-4 col-md-4 col-12"> 
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                        class="rounded-circle img-fluid" style="width: 150px;">
+                      <h5 class="my-3">{{userData.firstname}}</h5>
+                      <p class="text-muted mb-1">{{userData.email}}</p>
+                    </div>
+                  </div> 
+         </div>
+         <div class="col-lg-8 col-md-8 col-12">
+            <div class="card mb-2">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{userData.firstname}} {{userData.lastname}}</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">{{userData.email}}</p>
+                    </div>
+                </div>
+                  
+    
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0"> Mobile <i class="fa-solid fa-phone">  </i></p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{userData.phonenumber}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0"> State</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{userData.Address.state}}</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Address</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{userData.Address.house}},{{userData.Address.city}}</p>
+                  </div>
+                </div>
+         </div>
+         </div>
+        </div>
+    </section>
+    <section style="background-color: #eee;">
+        <div class="container ">
+         <div class="row">
+             <div class="col-lg-4 col-md-4 col-12 "> 
+                <div class="card mb-4 ">
+                    <div class="card-body">
+                    <div class="row">
+                            {{!-- <div class="col-sm-12">
+                                <p class="mb-0 ml-5  pl-5"><b>Orders</b></p>
+                              </div>
+                        --}}
+                    </div>
+                   
+                    <hr>
+                    <div class="col-sm-12">
+                        <a href="/viewOrders/{{userData._id}}"><p class="mb-0 ml-5 pl-5">My Orders</p></a>
+                      </div>
+                      <hr>
+                      <div class="col-sm-12">
+                        <a href="/editProfile/{{userData._id}}"><p class="mb-0 ml-5 pl-5 ">Edit Profile</p></a>
+                        </div>
+                        <hr>
+                        
+
+                    </div>
+                  </div> 
+         </div>
+         <div class="col-lg-8 col-md-8 col-12 ">
+            <div class="card mb-4 ">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">ID Card</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">Johnatan Smith</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Driving License</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">sudev.a.in@gamil.com</p>
+                    </div>
+                </div>
+                  
+    
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3 ">
+                    <p class="mb-0"> Mobile <i class="fa-solid fa-phone">  </i></p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">(098) 765-4321</p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0"> State</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">Kerala</p>
+                  </div>
+                </div>
+                
+         </div>
+         </div>
+        
+    </section>
+    <script src="https://kit.fontawesome.com/d46ab11f99.js" crossorigin="anonymous" ></script>
+</body>

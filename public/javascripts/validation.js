@@ -1,0 +1,131 @@
+jQuery.validator.addMethod("lettersonly", function(value, element) {
+    return this.optional(element) || /^[a-z]+$/i.test(value);
+  }, "Letters only please");
+
+$(document).ready(function(){
+    $("#userSignup").validate({
+        rules:
+        {
+            firstname:{
+                required:true,
+                minlength:4,
+                maxlength:20,
+                lettersonly:true
+            },
+            lastname:{
+                required:true,
+                lettersonly:true,
+                maxlength:20
+            },
+            email:{
+                required:true,
+                email:true
+            },
+            password:{
+                required:true,
+                minlength:8
+            },
+            phonenumber:{
+                required:true,
+                minlength:10,
+                maxlength:10,
+                number:true
+            },
+            cpassword:{
+                required:true,
+                equalTo:'#password'
+            }
+
+        }
+    })
+})
+$(document).ready(function(){
+    $("#userLogin").validate({
+        rules:
+        {
+            email:{
+                required:true
+            },
+            password:{
+                required:true
+            }
+        }
+    })
+})
+$(document).ready(function(){
+    $("#vendorSignup").validate({
+        rules:
+        {
+            firstname:{
+                required:true,
+                minlength:4,
+                maxlength:20,
+                lettersonly:true
+
+            },
+            lastname:{
+                required:true,
+                maxlength:20,
+                lettersonly:true
+
+            },
+            email:{
+                required:true,
+                email:true
+            },
+            password:{
+                required:true,
+                minlength:8
+            },
+            phonenumber:{
+                required:true,
+                minlength:10,
+                maxlength:10,
+                number:true
+            },
+            cpassword:{
+                required:true,
+                equalTo:'#password'
+            },
+            address:{
+                required:true
+            }
+        }
+    })
+})
+$(document).ready(function(){
+    $("#vendorLogin").validate({
+        rules:
+        {
+            email:{
+                required:true
+            },
+            password:{
+                required:true
+            }
+        }
+    })
+})
+$(document).ready(function(){
+    $("#adminLogin").validate({
+        rules:
+        {
+            email:{
+                required:true
+            },
+            password:{
+                required:true
+            }
+        },
+        messages:{
+            
+            email:{
+                required:"This field is required"
+            },
+            password:{
+                required:"This field is required"
+            }
+        }
+
+    })
+})

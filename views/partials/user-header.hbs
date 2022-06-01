@@ -1,0 +1,125 @@
+{{!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+     
+    <a class="navbar-brand ms-5" href="#">
+      <img src="images/logo1.png" alt="" width="150" height="50" class=" ms-5 ">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <form class="d-flex ms-5">
+        <input class="form-control" type="search" placeholder="Search for Products" aria-label="Search">
+        <button class="btn btn-outline-primary me-5" type="submit"><i class="bi bi-search" ></i></button>
+        
+        </form>
+    
+       
+      </ul>
+      
+      <ul class="navbar-nav ms-auto ">
+          <li class="nav-item me-5">
+          <a class="nav-link h5 mt-2 ms-5 ps-5" aria-current="page" href="#">Become a Seller</a>
+        </li>
+         
+          <li class="nav-item">
+          <a class="nav-link h5 btn btn-primary text-white mt-2 ps-3 pe-3" aria-current="page" href="#">Login</a>
+        </li>
+           <li class="nav-item dropdown ms-3">
+          <a class="nav-link dropdown-toggle btn btn-primary" style="color: white;" href="asdasdasd" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Login
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Signin</a></li>
+            <li><a class="dropdown-item" href="#">Signup</a></li>
+          </ul>
+        </li> 
+        </ul>
+      <form class="d-flex ">
+          
+         <input class="form-control" type="search" placeholder="Search for Products" aria-label="Search">
+        <button class="btn btn-outline-success me-5" type="submit"><i class="bi bi-search" ></i></button> 
+        
+
+        <a href="#"><i class="bi bi-person-circle h2 "></i></a>
+        <a href="#"> <i class="bi bi-cart3 h2"></i></a>
+        
+      </form>
+      </ul>
+    </div>
+  </div>
+</nav>
+another --}}
+<nav class="navbar navbar-expand-lg navbar-light bg-light p-2 shadow sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand ms-5 " href="/">
+      <img src="/images/logo1.png" alt="" width="150" height="60" class=" ms-5">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/shopping/men">Men</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/shopping/women">Women</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/shopping/kids">Kids</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/vendor">Become a Seller</a>
+        </li>
+        
+        
+      </ul>
+      <form class="d-flex me-5">
+        <input class="form-control w-100" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search" ></i></button> 
+      </form>
+      <ul class="navbar-nav  mb-lg-0">
+          {{!-- <li class="nav-item">
+          <a class="nav-link text-white btn btn-primary pe-3 ps-3 mt-2 me-5" aria-current="page" href="/login">Login</a>
+        </li> --}}
+        <li class="nav-item dropdown me-3 mt-1">
+          <a class="nav-link dropdown-toggle text-primary" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{#if userData}}
+            {{userData.firstname}}
+            {{else}}
+            Account
+            {{/if}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {{#if userData}}
+              <li><a class="dropdown-item" onclick="fun()" href="/logout">Logout</a></li>
+              {{else}}
+              <li><a class="dropdown-item" href="/login">Login</a></li>
+              {{/if}}
+          </ul>
+        </li>
+          {{#if userData}}
+        <li class="nav-item">
+          <a class="nav-link active me-3" aria-current="page" href="/viewProfile/{{userData._id}}"><i class="bi bi-person-circle h2 "></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active me-3" aria-current="page" href="/cart/{{userData._id}}"><i class="bi bi-cart3 h2"></i></a>
+        </li>
+        {{else}}
+        <div></div>
+        {{/if}}
+      
+      
+
+     
+    </div>
+  </div>
+</nav>
+<script>
+  function fun(){
+    window.history.replaceState(null,"","/login")
+  }
+</script>

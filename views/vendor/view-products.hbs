@@ -1,0 +1,61 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-5 fw-bold" style="color:red; font-family: 'Times New Roman', Times, serif;" >MANAGE USERS</h2>
+<table id="example" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>ProductId</th>
+                <th>Category</th>
+                <th>Occassion</th>
+                <th>Gender</th>
+                <th>Address</th>
+                <th>View Orders</th>
+                {{!-- <th>View Cart</th> --}}
+                <th>Block User</th>
+                <th>Delete User</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products}}
+            {{#if this.isActive}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.category}} </td>
+                <td>{{this.occassion}}</td>
+                <td>{{this.brand}}</td>
+                 <td></td>
+                <td><a href="/admin/viewusers/userdetails"class="btn btn-success">ORDERS</a></td>
+                {{!-- <td><a href=""class="btn btn-info">CART</a></td> --}}
+                {{!-- {{#if this.isActive}} --}}
+                
+                <td><img style="width:50px;height:50px"src="/public/images/productsImages/{{this._id}}(1).jpg"></td>
+                {{!-- {{else}} --}}
+                
+                <td><a href="/admin/viewusers/unBlockuser/{{this._id}}"class="btn btn-warning">UNBLOCK</a></td>
+                {{!-- {{/if}} --}}
+                <td><a href="/admin/viewusers/deleteuser/{{this._id}}"class="btn btn-danger" onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')">DELETE</a></td>
+               
+            </tr>
+            {{/if}}
+             {{/each}}
+           
+        </tbody>
+        {{!-- <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start date</th>
+                <th>Salary</th>
+                <th>Salary</th>
+                <th>Actions</th>
+            </tr>
+        </tfoot> --}}
+    </table>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    let table = new DataTable('#example');
+});
+</script>
