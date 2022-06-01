@@ -343,9 +343,15 @@ module.exports = {
           ]).toArray()
           resolve(order[0].orders)
       })
-  },viewOrders:()=>{
+  },viewOrders:(vendorId)=>{
       return new Promise(async(resolve,reject)=>{
-         db.get().collection(collection.VENDOR_COLLECTION).findOne({})
+        console.log(vendorId);
+       let x = await  db.get().collection(collection.USER_COLLECTION).aggregate([
+          {$unwind:'$orders'},
+          {$match:{'orders.productDetails.vendorId':ObjectId(vendorId)}},
+          
+         ]).toArray()
+         resolve(x)
       })
   }
 };

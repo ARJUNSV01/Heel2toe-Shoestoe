@@ -38,12 +38,12 @@ module.exports = {
     };
     if (products.gender == "kids") {
       products.quantity = {
-        threetofour: productDetails.threetofour,
-        fourtofive: productDetails.fourtofive,
-        fivetosix: productDetails.fivetosix,
-        sixtoseven: productDetails.sixtoseven,
-        seventoeight: productDetails.seventoeight,
-        eighttonine: productDetails.eighttonine,
+        threetofour: Number(productDetails.threetofour),
+        fourtofive: Number(productDetails.fourtofive),
+        fivetosix: Number(productDetails.fivetosix),
+        sixtoseven: Number(productDetails.sixtoseven),
+        seventoeight: Number(productDetails.seventoeight),
+        eighttonine: Number(productDetails.eighttonine),
       };
       products.sizesAvailable = [
         { size: "threetofour", qty: Number(productDetails.six) },
@@ -55,12 +55,12 @@ module.exports = {
       ];
     } else {
       products.quantity = {
-        six: productDetails.six,
-        seven: productDetails.seven,
-        eight: productDetails.eight,
-        nine: productDetails.nine,
-        ten: productDetails.ten,
-        eleven: productDetails.eleven,
+        six: Number(productDetails.six),
+        seven: Number(productDetails.seven),
+        eight: Number(productDetails.eight),
+        nine: Number(productDetails.nine),
+        ten: Number(productDetails.ten),
+        eleven: Number(productDetails.eleven),
         twelve: productDetails.twelve,
         thirteen: productDetails.thirteen,
         fourteen: productDetails.fourteen,

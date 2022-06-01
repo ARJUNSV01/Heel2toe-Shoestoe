@@ -9,6 +9,15 @@ var router = express.Router();
 var vendorHelper = require("../helpers/vendor-helper");
 const { route } = require("./users");
 
+
+let verifyLogin = (req, res, next) => {
+  if (req.session.vendorLogged) {
+    next();
+  } else {
+    res.redirect("/vendor/login");
+  }
+};
+
 router.get("/", (req, res) => {
   res.render("vendor/vendorsignup", {
     user: false,
@@ -183,9 +192,20 @@ router.get("/home/viewproducts/view/:id", (req, res) => {
     res.redirect("/vendor/login");
   }
 });
-router.get('/viewOrders',(req,res)=>{
-    orderHelper.view
+router.get('/viewOrders',verifyLogin,(req,res)=>{
+  let vendorData = req.session.vendor;
+    orderHelper.viewOrders(vendorData._id).then((orders)=>{
+      console.log(true,orders);
+      res.render('vendor/view-orders',{vendor:true,vendorData,orders})
+    })
 })
+router.get("/viewOrders/orderedItems/:id", (req, res) => {
+  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
+    let vendorData=req.session.vendor
+    let productDetails = orders.productDetails;
+    res.render("vendor/ordered-items", { vendor: true, orders, productDetails,vendorData });
+  });
+});
 
 router.get("/logout", (req, res) => {
   req.session.vendorLogged = false;

@@ -137,7 +137,7 @@ router.post("/shopping/viewProduct/:id", verifyLogin, (req, res) => {
         .aggregate([
           { $unwind: "$products" },
           { $match: { "products._id": ObjectId(productid) } },
-          { $project: { products: 1, _id: 0 } },
+          { $project: { products: 1 } },
         ])
         .toArray();
       singleproduct = singleproduct[0];
@@ -149,6 +149,7 @@ router.post("/shopping/viewProduct/:id", verifyLogin, (req, res) => {
       let userCart = {
         cartId: new ObjectId(),
         productId: productid,
+        vendorId:singleproduct._id,
         title: singleproduct.products.title,
         price: singleproduct.products.price * 1,
         discount: singleproduct.products.discount * 1,
