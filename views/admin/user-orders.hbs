@@ -1,0 +1,92 @@
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<div id="layoutSidenav_content">
+  <main>
+    <div class="container bg-light px-4">
+
+      <ol class="breadcrumb mb-4 mt-4">
+        <li class="breadcrumb-item"><a href="/admin/home">Dashboard</a></li>
+        <li class="breadcrumb-item active"><a href="/admin/viewusers">Manage Users</a></li>
+        {{!-- <li class="breadcrumb-item active"><a href="/admin/viewusers/userOrders/{{this._id}}">View Orders</a></li>
+        --}}
+      </ol>
+      <p class="fs-1 fw-bolder text-center">Orders</p>
+      <div class="card mb-4 mt-5">
+
+        <div class="card-body">
+          <table id="datatablesSimple">
+            <thead class="bg-light">
+              <tr>
+                <th>Sr.no</th>
+                <th>OrderId</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Ordered On</th>
+                <th>Amount</th>
+                <th>Actions</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {{#each orders}}
+              <tr>
+                <td>
+                  <p class="py-5">{{@index}}</p>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center py-5">
+                    {{!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
+                      style="width: 45px; height: 45px" class="rounded-circle" /> --}}
+                    <div class="">
+                      <p class="fw-bold mb-1">{{this.orderId}}</p>
+                      {{!-- <p class="text-muted mb-0">john.doe@gmail.com</p> --}}
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p class="fw-normal py-5">{{this.deliveryDetails.mobile}}</p>
+                  {{!-- <p class="text-muted mb-0">IT department</p> --}}
+                </td>
+                {{!-- <td>
+                  <span class="badge badge-success rounded-pill d-inline ">Active</span>
+                </td> --}}
+                <td>
+                  <p class="py-5">
+                    {{this.deliveryDetails.house}},{{this.deliveryDetails.city}},{{this.deliveryDetails.state}}</p>
+                </td>
+                <td>
+                  <p class="py-5">{{this.time}}</p>
+                </td>
+                <td>
+                  <p class="py-5">Rs.{{this.totalAmount}}</p>
+                </td>
+                <td>
+                  <a href="/admin/orderDetails/{{this.orderId}}" class="btn btn-warning btn-sm btn-rounded my-5"> View
+                  </a>
+
+                </td>
+              </tr>
+              {{/each}}
+
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="py-4 bg-light mt-auto">
+    <div class="container-fluid px-4">
+      <div class="d-flex align-items-center justify-content-between small">
+        <div class="text-muted">Copyright &copy; Heel2toe</div>
+
+      </div>
+    </div>
+  </footer>
+</div>
+{{!--
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  crossorigin="anonymous"></script> --}}
+{{!--
+<script src="/javascripts/admintempfiles/js/scripts.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/javascripts/admintempfiles/js/datatables-simple-demo.js"></script>

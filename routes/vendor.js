@@ -14,7 +14,7 @@ let verifyLogin = (req, res, next) => {
   if (req.session.vendorLogged) {
     next();
   } else {
-    res.redirect("/vendor/login");
+    res.render("vendor/please-login")
   }
 };
 

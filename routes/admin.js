@@ -4,6 +4,7 @@ var express = require("express");
 const session = require("express-session");
 var router = express.Router();
 var adminHelper = require("../helpers/admin-helper");
+const orderHelper=require("../helpers/order-helper")
 
 /* GET home page. */
 let adminlogged = (req, res, next) => {
@@ -19,7 +20,7 @@ router.get("/", function (req, res) {
     res.redirect("admin/home");
   } else {
     res.render("admin/adminlogin", {
-      admin: true,
+      
       loginError: req.session.loginError,
     });
     req.session.loginError = false;
@@ -38,35 +39,33 @@ router.post("/adminlog", (req, res) => {
   });
 });
 
-router.get("/home", (req, res) => {
-  if (req.session.loggedAdmin) {
+router.get("/home",adminlogged, (req, res) => {
     let admintrue = req.session.admin;
     console.log(admintrue);
     res.render("admin/adminhome", { admintrue, admin: true });
-  } else {
-    res.redirect("/admin");
-  }
+  
 });
-router.get("/viewusers", (req, res) => {
-  if (req.session.loggedAdmin) {
+router.get("/viewusers",adminlogged, (req, res) => {
     adminHelper.getAllUsers().then((users) => {
       console.log(users);
       let admintrue = req.session.admin;
       res.render("admin/view-users", { admin: true, users, admintrue });
     });
-  } else {
-    res.redirect("/admin");
-  }
 });
 
-router.get("/viewusers/userdetails", (req, res) => {
-  if (req.session.loggedAdmin) {
-    let admintrue = req.session.admin;
-    res.render("admin/user-details", { admintrue, admin: true });
-  } else {
-    res.redirect("/admin");
-  }
+router.get("/viewusers/userOrders/:id",adminlogged ,(req, res) => {
+  orderHelper.getOrderDetails(req.params.id).then((orders) => {
+    res.render("admin/user-orders", { admin: true, orders });
+  });
 });
+router.get('/orderDetails/:id',adminlogged,(req,res)=>{
+  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
+    console.log('hi');
+    let admintrue=req.session.admin
+    let productDetails = orders.productDetails;
+    res.render("admin/user-order-details", { admin: true, orders, productDetails,admintrue});
+  });
+})
 
 router.get("/viewusers/deleteuser/:id", (req, res) => {
   let userId = req.params.id;
@@ -97,5 +96,46 @@ router.get("/logout", (req, res) => {
   req.session.loggedAdmin = false;
   res.redirect("/admin");
 });
+router.get("/viewVendors",adminlogged, (req, res) => {
+  if (req.session.loggedAdmin) {
+    adminHelper.getAllVendors().then((vendors) => {
+      console.log(vendors);
+      let admintrue = req.session.admin;
+      res.render("admin/view-vendors", { admin: true, vendors, admintrue });
+    });
+  } else {
+    res.redirect("/admin");
+  }
+});
+router.get("/viewVendors/vendorOrders/:id",adminlogged ,(req, res) => {
+  orderHelper.viewOrders(req.params.id).then((orders)=>{
+    let admintrue=req.session.admin
+    res.render('admin/vendor-orders',{admin:true,admintrue,orders})
+  })
+});
+router.get("/vendorOrderDetails/:id", (req, res) => {
+  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
+    let admintrue=req.session.admin
+    let productDetails = orders.productDetails;
+    res.render("admin/vendor-order-details", { admin: true, orders, productDetails,admintrue });
+  });
+});
+router.get("/viewVendors/blockVendor/:id", (req, res) => {
+  let vendorId = req.params.id;
+  console.log('hi');
+  adminHelper.blockVendor(vendorId).then((response) => {
+    console.log(response);
+
+    res.redirect("/admin/viewVendors");
+  });
+});
+router.get("/viewVendors/unBlockVendor/:id", (req, res) => {
+  let vendorId = req.params.id;
+  adminHelper.unBlockVendor(vendorId).then((response) => {
+    console.log(response);
+    res.redirect("/admin/viewVendors");
+  });
+});
+
 
 module.exports = router;

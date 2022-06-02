@@ -28,8 +28,9 @@ let userBlocked = (req, res, next) => {
 
 router.get("/", (req, res) => {
   let userData = req.session.user;
-
-  res.render("user/home", { userData, user: true });
+  productHelper.getLatestProducts().then((latestProducts)=>{
+  res.render("user/home", { userData, user: true,latestProducts });
+  })
 });
 
 router.get("/login", function (req, res) {
@@ -86,8 +87,10 @@ router.get("/shopping/:id", async (req, res) => {
 
   try {
     productHelper.shoppingViewProducts(req.params.id).then((menProducts) => {
+     
       res.render("user/shopping", { user: true, userData, menProducts });
-    });
+    
+  })
   } catch (err) {
     console.log(err);
   }
@@ -98,7 +101,10 @@ router.get("/shopping/view/:id", async (req, res) => {
   let productId = req.params.id;
   try {
     productHelper.getProductDetails(req.params.id).then((product) => {
-      console.log(product);
+      let avgRating=product.avgRating
+      let reviews=product.reviews
+      
+      
       if (
         product.products.gender == "men" ||
         product.products.gender == "women"
@@ -111,6 +117,8 @@ router.get("/shopping/view/:id", async (req, res) => {
         userData,
         productId,
         adult,
+        avgRating,
+        reviews
       });
     });
   } catch (err) {
@@ -149,7 +157,7 @@ router.post("/shopping/viewProduct/:id", verifyLogin, (req, res) => {
       let userCart = {
         cartId: new ObjectId(),
         productId: productid,
-        vendorId:singleproduct._id,
+        vendorId: singleproduct._id,
         title: singleproduct.products.title,
         price: singleproduct.products.price * 1,
         discount: singleproduct.products.discount * 1,
@@ -279,7 +287,7 @@ router.get("/editProfile/:id", verifyLogin, (req, res) => {
     console.log(err);
   }
 });
-router.post("/updateprofile", (req, res) => {
+router.post("/updateprofile", verifyLogin, (req, res) => {
   let userData = req.session.user;
   console.log(req.body);
   userHelper.updateProfile(req.body, userData._id).then(() => {
@@ -306,11 +314,22 @@ router.get("/viewOrders/:id", verifyLogin, (req, res) => {
     console.log(err);
   }
 });
-router.get("/orderedItems/:id", (req, res) => {
+router.get("/orderedItems/:id", verifyLogin, (req, res) => {
   orderHelper.getOrderedProducts(req.params.id).then((orders) => {
-    let userData=req.session.user
+    let userData = req.session.user;
     let productDetails = orders.productDetails;
-    res.render("user/ordered-items", { user: true, orders, productDetails,userData });
+    res.render("user/ordered-items", {
+      user: true,
+      orders,
+      productDetails,
+      userData,
+    });
+  });
+});
+router.post("/submit-reviews/:id",verifyLogin,(req, res) => {
+  productHelper.submitReviews(req.body, req.session.user._id).then(() => {
+    // res.json({ status: true });
+    res.redirect("/shopping/view/"+req.params.id)
   });
 });
 module.exports = router;

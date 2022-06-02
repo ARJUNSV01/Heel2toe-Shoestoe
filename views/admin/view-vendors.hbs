@@ -1,15 +1,16 @@
+
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <div id="layoutSidenav_content">
     <main>
         <div class="container bg-light px-4">
 
             <ol class="breadcrumb mb-4 mt-4">
-                <li class="breadcrumb-item"><a style="text-decoration: none;" href="/admin/home">Dashboard</a></li>
-                <li class="breadcrumb-item active"><a style="text-decoration: none;"href="/admin/viewusers"> Manage Users</a></li>
+                <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Tables</li>
             </ol>
-<p class="fs-1 fw-bolder text-center">Manage Users</p>
+<p class="fs-1 fw-bolder text-center">Manage Vendors</p>
             <div class="card mb-4 mt-5">
-
+                
                 <div class="card-body">
                     <table id="datatablesSimple">
                         <thead>
@@ -27,23 +28,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{#each users}}
+                            {{#each vendors}}
                             <tr>
                                 <td>{{this._id}}</td>
                                 <td>{{this.firstname}} {{this.lastname}}</td>
                                 <td>{{this.email}}</td>
                                 <td>{{this.gender}}</td>
                                 <td></td>
-                                <td><a href="/admin/viewusers/userOrders/{{this._id}}" class="btn btn-success">ORDERS</a></td>
+                                <td><a href="/admin/viewVendors/vendorOrders/{{this._id}}" class="btn btn-success">ORDERS</a></td>
                                 {{!-- <td><a href="" class="btn btn-info">CART</a></td> --}}
                                 {{#if this.isActive}}
 
-                                <td><a href="/admin/viewusers/blockuser/{{this._id}}" class="btn btn-warning">BLOCK</a>
+                                <td><a href="/admin/viewVendors/blockVendor/{{this._id}}"style="all:unset;cursor:pointer" class="text-primary fs-bolder ms-4">BLOCK</a>
                                 </td>
                                 {{else}}
 
-                                <td><a href="/admin/viewusers/unBlockuser/{{this._id}}"
-                                        class="btn btn-warning">UNBLOCK</a></td>
+                                <td><a href="/admin/viewVendors/unBlockVendor/{{this._id}}"
+                                       style="all:unset;cursor:pointer" class="text-info">UNBLOCK</a></td>
                                 {{/if}}
                                 <td><a href="/admin/viewusers/deleteuser/{{this._id}}" class="btn btn-danger"
                                         onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')">DELETE</a>
@@ -62,8 +63,12 @@
     <footer class="py-4 bg-light mt-auto">
         <div class="container-fluid px-4">
             <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-muted">Copyright &copy; Heel2toe</div>
-                
+                <div class="text-muted">Copyright &copy; Your Heel2toe</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a>
+                </div>
             </div>
         </div>
     </footer>

@@ -89,4 +89,37 @@ module.exports = {
       resolve(response);
     });
   },
+  getAllVendors:()=>{
+    return new Promise(async(resolve,reject)=>{
+    let vendors =  await db.get().collection(collection.VENDOR_COLLECTION).find().toArray()
+    console.log(vendors);
+    resolve(vendors)
+    })
+  },
+  blockVendor: (vendorId) => {
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .updateOne({ _id: ObjectId(vendorId) }, { $set: { isActive: false } });
+      let response = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .findOne({ _id: ObjectId(vendorId) });
+      resolve(response);
+    });
+  },
+  unBlockVendor: (vendorId) => {
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .updateOne({ _id: ObjectId(vendorId) }, { $set: { isActive: true } });
+      let response = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .findOne({ _id: ObjectId(vendorId) });
+      resolve(response);
+    });
+  },
 };

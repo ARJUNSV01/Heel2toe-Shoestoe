@@ -16,6 +16,7 @@ module.exports = {
         reject();
       } else {
         vendorData.isActive = true;
+        vendorData.approved=false
         delete vendorData.cpassword;
         vendorData.password = await bcrypt.hash(vendorData.password, 10);
         db.get()
