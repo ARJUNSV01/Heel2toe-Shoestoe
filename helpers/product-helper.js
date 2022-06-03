@@ -124,7 +124,9 @@ module.exports = {
           sum = sum + one.rating;
         }
         let avg = parseInt(sum / reviews.length);
-        await db.get().collection(collection.VENDOR_COLLECTION)
+        
+        await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+        {$set:{'products.$.avgRating':avg}})
         let avgRating = function (avg) {
           //   if (avg == 1) {
           //     const verypoor = true;
@@ -259,6 +261,7 @@ module.exports = {
 
   shoppingViewProducts: (gender) =>
     new Promise(async (resolve, reject) => {
+      
       const menProducts = await db
         .get()
         .collection(collection.VENDOR_COLLECTION)
@@ -320,7 +323,7 @@ module.exports = {
       resolve(pro);
     });
   },
-  getSortedProducts: (sortBy) => {
+  getSortedProducts: (sortBy,gender) => {
     return new Promise(async (resolve, reject) => {
       console.log(sortBy);
       //   if(sort=='addedOn'){
@@ -368,6 +371,7 @@ module.exports = {
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
+              {$match:{'products.gender':gender}},
               { $sort: { "products.addedOn": 1 } },
             ])
             .toArray();
@@ -382,6 +386,7 @@ module.exports = {
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
+              {$match:{'products.gender':gender}},
               { $sort: { "products.netprice": 1 } },
             ])
             .toArray();
@@ -396,6 +401,7 @@ module.exports = {
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
+              {$match:{'products.gender':gender}},
               { $sort: { "products.netprice": -1 } },
             ])
             .toArray();
@@ -410,10 +416,11 @@ module.exports = {
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
-              { $sort: { "products.addedOn": 1 } },
+              {$match:{'products.gender':gender}},
+              { $sort: { "products.avgRating": 1 } },
             ])
             .toArray();
-          console.log(sortedProducts);
+          console.log(true, sortedProducts);
           resolve(sortedProducts);
 
           break;

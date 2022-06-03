@@ -46,5 +46,14 @@ function deleteItem(cartId) {
       }
     })
   }
+  // function sortProducts(sortBy){
+  //   $.ajax({
+  //     url:'/sortedProducts/'+sortBy,
+  //     method:'get',
+  //     success(response){
+  //       alert(response)
+  //     }
+  //   })
+  // }
   
   

@@ -11,21 +11,22 @@
     <link href="/stylesheets/css/responsive.css" rel="stylesheet"> --}}
 
 
-    <div class="dropdown float-end mt-3 me-3 ">
-  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+    <div class="dropdown float-end mt-3 me-4 ">
+  <a class="border border-dark  text-black pt-1 pb-1 ps-5 pe-5 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
     Sort Products
   </a>
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <li><a class="dropdown-item" href="/sortedProducts/addedOn">latest</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/netPricelowtohigh">Price: low to high</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/netPricehightolow">Price: high to low</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/rating">rating</a></li>
+    <li><a class="dropdown-item" href="/sortedProducts/addedOn" >What's new</a></li>
+    <li><a class="dropdown-item" href="/sortedProducts/netPricelowtohigh" >Price : low to high</a></li>
+    <li><a class="dropdown-item" href="/sortedProducts/netPricehightolow" >Price : high to low</a></li>
+    <li><a class="dropdown-item" href="/sortedProducts/rating"  >Customer Rating</a></li>
   </ul>
 </div>
-
-
-        
+{{!-- href="/sortedProducts/addedOn"
+href="/sortedProducts/netPricelowtohigh"
+href="/sortedProducts/netPricehightolow"  
+href="/sortedProducts/rating"       --}}
         <!-- ****** Quick View Modal Area Start ****** -->
         <div class="modal fade" id="quickview" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -261,7 +262,8 @@
                                 <div class="col-12 col-sm-6 col-lg-4 single_gallery_item wow fadeInUpBig" data-wow-delay="0.2s">
                                     <!-- Product Image -->
                                     <div class="product-img">
-                                        <img src="/images/productsImages/{{this.products._id}}(1).jpg" alt="">
+                                        <img src="/images/productsImages/{{this.products._id}}(1).jpg" alt="" >
+                                        <div class="p-1" style="position: absolute;bottom: 10px;right:5px;"><p style="display: inline;" class="fw-bolder pe-1">{{this.products.avgRating}}</p><i class="fa-solid fa-star text-info"></i></div>
                                         <div class="product-quicview">
                                             <a href="/shopping/view/{{this.products._id}}" data-toggle="modal" data-target="#quickview">
 <i class="fa fa-plus" aria-hidden="true"></i></a>

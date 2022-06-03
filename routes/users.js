@@ -84,7 +84,7 @@ router.post("/login", (req, res) => {
 
 router.get("/shopping/:id", async (req, res) => {
   let userData = req.session.user;
-
+  req.session.gender=req.params.id
   try {
     productHelper.shoppingViewProducts(req.params.id).then((menProducts) => {
      
@@ -332,11 +332,11 @@ router.post("/submit-reviews/:id",verifyLogin,(req, res) => {
     res.redirect("/shopping/view/"+req.params.id)
   });
 });
-router.get('/sortedProducts/:id',(req,res)=>{
-  
-  productHelper.getSortedProducts(req.params.id).then((sortedProducts)=>{
-    
-    res.render('user/shopping',{sortedProducts})
+router.get('/sortedProducts/:id',(req,res)=>{ 
+  let gender=req.session.gender
+  let userData=req.session.user
+  productHelper.getSortedProducts(req.params.id,gender).then((menProducts)=>{  
+    res.render('user/shopping',{menProducts,userData,user:true})
   })
 
 })
