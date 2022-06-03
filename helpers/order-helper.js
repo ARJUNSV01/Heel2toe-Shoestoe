@@ -226,7 +226,7 @@ module.exports = {
         let productId = one.cart.productId;
         let quantity = one.cart.quantity;
         let Size = one.cart.size;
-        if (Size == "six")
+        if (Size == "six"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -234,7 +234,11 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.six": -quantity } }
             );
-        if (Size == "seven")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.six':{$lte:0}},
+            {$set:{'products.$.quantity.six':null}})
+            
+          }
+        if (Size == "seven"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -242,7 +246,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.seven": -quantity } }
             );
-        if (Size == "eight")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.seven':{$lte:0}},
+            {$set:{'products.$.quantity.seven':null}})
+        }
+        if (Size == "eight"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -250,7 +257,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.eight": -quantity } }
             );
-        if (Size == "nine")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.eight':{$lte:0}},
+            {$set:{'products.$.quantity.eight':null}})
+          }
+        if (Size == "nine"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -258,7 +268,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.nine": -quantity } }
             );
-        if (Size == "ten")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.nine':{$lte:0}},
+            {$set:{'products.$.quantity.nine':null}})
+        }
+        if (Size == "ten"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -266,7 +279,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.ten": -quantity } }
             );
-        if (Size == "eleven")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.ten':{$lte:0}},
+            {$set:{'products.$.quantity.ten':null}})
+          }
+        if (Size == "eleven"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -274,7 +290,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.eleven": -quantity } }
             );
-        if (Size == "3-4")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.eleven':{$lte:0}},
+            {$set:{'products.$.quantity.eleven':null}})
+        }
+        if (Size == "3-4"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -282,7 +301,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.threetofour": -quantity } }
             );
-        if (Size == "4-5")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.threetofour':{$lte:0}},
+            {$set:{'products.$.quantity.threetofour':null}})
+        }
+        if (Size == "4-5"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -290,7 +312,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.fourtofive": -quantity } }
             );
-        if (Size == "5-6")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.fourtofive':{$lte:0}},
+            {$set:{'products.$.quantity.fourtofive':null}})
+        }
+        if (Size == "5-6"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -298,7 +323,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.fivetosix": -quantity } }
             );
-        if (Size == "6-7")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.fivetosix':{$lte:0}},
+            {$set:{'products.$.quantity.fivetosix':null}})
+        }
+        if (Size == "6-7"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -306,7 +334,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.sixtoseven": -quantity } }
             );
-        if (Size == "7-8")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.sixtoseven':{$lte:0}},
+            {$set:{'products.$.quantity.sixtoseven':null}})
+        }
+        if (Size == "7-8"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -314,7 +345,10 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.seventoeight": -quantity } }
             );
-        if (Size == "8-9")
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.seventoeight':{$lte:0}},
+            {$set:{'products.$.quantity.seventoeight':null}})
+        }
+        if (Size == "8-9"){
           await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
@@ -322,6 +356,9 @@ module.exports = {
               { "products._id": ObjectId(productId) },
               { $inc: { "products.$.quantity.eighttonine": -quantity } }
             );
+            await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products.quantity.eighttonine':{$lte:0}},
+            {$set:{'products.$.quantity.eighttonine':null}})
+        }
       }
       resolve();
     });

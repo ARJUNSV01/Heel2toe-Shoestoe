@@ -332,4 +332,12 @@ router.post("/submit-reviews/:id",verifyLogin,(req, res) => {
     res.redirect("/shopping/view/"+req.params.id)
   });
 });
+router.get('/sortedProducts/:id',(req,res)=>{
+  
+  productHelper.getSortedProducts(req.params.id).then((sortedProducts)=>{
+    
+    res.render('user/shopping',{sortedProducts})
+  })
+
+})
 module.exports = router;

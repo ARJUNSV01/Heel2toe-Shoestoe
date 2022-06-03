@@ -26,7 +26,7 @@ module.exports = {
     // console.log(productDetails);
     const products = {
       _id: new ObjectId(),
-      addedOn:new Date(),
+      addedOn: new Date(),
       title: productDetails.title,
       category: productDetails.category,
       brand: productDetails.brand,
@@ -119,54 +119,55 @@ module.exports = {
       let reviews = productDetails[0].products.reviews;
       let sum = 0;
       console.log(reviews);
-      if(reviews){
-      for (let one of reviews) {
-        sum = sum + one.rating;
+      if (reviews) {
+        for (let one of reviews) {
+          sum = sum + one.rating;
+        }
+        let avg = parseInt(sum / reviews.length);
+        await db.get().collection(collection.VENDOR_COLLECTION)
+        let avgRating = function (avg) {
+          //   if (avg == 1) {
+          //     const verypoor = true;
+          //     return { verypoor: true };
+          //   }
+          //   if (avg == 2) {
+          //     const poor = true;
+          //     return { poor: true };
+          //   }
+          //   if (avg == 3) {
+          //     const normal = true;
+          //     return { normal: true };
+          //   }
+          //   if (avg == 4) {
+          //     const good = true;
+          //     return { good: true };
+          //   }
+          //   if (avg == 5) {
+          //     const verygood = true;
+          //     return { verygood: true };
+          //   }
+          // };
+          switch (avg) {
+            case 1:
+              return { verypoor: true };
+            case 2:
+              return { poor: true };
+            case 3:
+              return { normal: true };
+            case 4:
+              return { good: true };
+            case 5:
+              return { verygood: true };
+            default:
+              break;
+          }
+        };
+        let value = avgRating(avg);
+        console.log(value);
+        productDetails[0].avgRating = value;
       }
-      let avg = parseInt(sum / reviews.length);
-      
-      let avgRating = function (avg) {
-      //   if (avg == 1) {
-      //     const verypoor = true;
-      //     return { verypoor: true };
-      //   }
-      //   if (avg == 2) {
-      //     const poor = true;
-      //     return { poor: true };
-      //   }
-      //   if (avg == 3) {
-      //     const normal = true;
-      //     return { normal: true };
-      //   }
-      //   if (avg == 4) {
-      //     const good = true;
-      //     return { good: true };
-      //   }
-      //   if (avg == 5) {
-      //     const verygood = true;
-      //     return { verygood: true };
-      //   }
-      // };
-      switch (avg) {
-        case 1:
-        return { verypoor: true };
-        case 2:
-        return { poor: true };
-        case 3:
-        return { normal: true };
-        case 4:
-        return { good: true };
-        case 5:
-        return { verygood: true };
-        default:
-          break;
-      }
-    }
-      let value = avgRating(avg);
-      console.log(value);
-productDetails[0].avgRating = value}
-productDetails[0].reviews=reviews
-console.log(productDetails[0]);
+      productDetails[0].reviews = reviews;
+      console.log(productDetails[0]);
       resolve(productDetails[0]);
     }),
   updateProduct: (productId, updatedInfo) =>
@@ -178,7 +179,7 @@ console.log(productDetails[0]);
           { "products._id": ObjectId(productId) },
           {
             $set: {
-              "products.$.addedOn":new Date(),
+              "products.$.addedOn": new Date(),
               "products.$.title": updatedInfo.title,
               "products.$.category": updatedInfo.category,
               "products.$.brand": updatedInfo.brand,
@@ -279,10 +280,13 @@ console.log(productDetails[0]);
     }),
   submitReviews: (reviews, userId) => {
     return new Promise(async (resolve, reject) => {
-     let user= await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)})
+      let user = await db
+        .get()
+        .collection(collection.USER_COLLECTION)
+        .findOne({ _id: ObjectId(userId) });
       let customerReviews = {
-        time:new Date(),
-        user:user.firstname,
+        time: new Date(),
+        user: user.firstname,
         userId: userId,
         productId: reviews.productId,
         rating: Number(reviews.star),
@@ -298,19 +302,127 @@ console.log(productDetails[0]);
         );
       resolve();
     });
-  },getLatestProducts:()=>{
-    return new Promise(async(resolve,reject)=>{
-     let pro= await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-       {$unwind:'$products'},
-       {$project:{products:1,_id:0}},
-       {$match:{'products.deleted':false}},
-        {$sort:{'products.addedOn':1}},
-        {$limit:10}
-      ]).toArray()
-      console.log(true,pro);
-      resolve(pro)
-    })
-  }
+  },
+  getLatestProducts: () => {
+    return new Promise(async (resolve, reject) => {
+      let pro = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          { $unwind: "$products" },
+          { $project: { products: 1, _id: 0 } },
+          { $match: { "products.deleted": false } },
+          { $sort: { "products.addedOn": 1 } },
+          { $limit: 10 },
+        ])
+        .toArray();
+      console.log(true, pro);
+      resolve(pro);
+    });
+  },
+  getSortedProducts: (sortBy) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(sortBy);
+      //   if(sort=='addedOn'){
+      //  let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+      //     {$unwind:'$products'},
+      //     {$project:{products:1,_id:0}},
+      //     {$sort:{'products.addedOn':1}}
+      //   ]).toArray()
+      //   console.log(sortedProducts);
+      //   resolve(sortedProducts)
+      // }
+      // if(sort=='netPricelowtohigh'){
+      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+      //     {$unwind:'$products'},
+      //     {$project:{products:1,_id:0}},
+      //     {$sort:{'products.netprice':1}}
+      //   ]).toArray()
+      //   console.log(sortedProducts);
+      //   resolve(sortedProducts)
+      // }
+      // if(sort=='netPricehightolow'){
+      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+      //     {$unwind:'$products'},
+      //     {$project:{products:1,_id:0}},
+      //     {$sort:{'products.netprice':-1}}
+      //   ]).toArray()
+      //   console.log(sortedProducts);
+      //   resolve(sortedProducts)
+      // }
+      // if(sort=='netPricelowtohigh'){
+      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+      //     {$unwind:'$products'},
+      //     {$project:{products:1,_id:0}},
+      //     {$sort:{'products.addedOn':1}}
+      //   ]).toArray()
+      //   console.log(sortedProducts);
+      //   resolve(sortedProducts)
+      // }
+      var sortedProducts;
+      switch (sortBy) {
+        case "addedOn":
+          sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              { $sort: { "products.addedOn": 1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+
+          break;
+        case "netPricelowtohigh":
+          sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              { $sort: { "products.netprice": 1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+
+          break;
+        case "netPricehightolow":
+          sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              { $sort: { "products.netprice": -1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+
+          break;
+        case "rating":
+          sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              { $sort: { "products.addedOn": 1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+
+          break;
+
+        default:
+          break;
+      }
+    });
+  },
   // addToCart: (size, productid, userId) => new Promise(async (resolve, reject) => {
   //   console.log(userId);
   //   const product = await db.get().collection(collection.USER_COLLECTION).aggregate([
