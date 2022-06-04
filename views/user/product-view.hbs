@@ -249,7 +249,7 @@
                             <h6 class="mb-2 pb-1">SELECT SIZE (UK) </h6>
                             {{#if product.products.quantity.six}}
                             <div class="form-check form-check-inline me-0">
-                                <input class=" form-check-input btn" type="radio" name="size" id="femaleGender"
+                                <input class=" form-check-input btn" type="radio" name="size"  id="femaleGender"
                                     value="six" />
                                 <label style=" position: relative; left: -24px; font-size: 15px; color: black;"
                                     class="form-check-label fw-bolder " for="femaleGender">6</label>
@@ -442,8 +442,8 @@
                         <div class="cart clearfix mb-50 d-flex">
 
 
-                            <button type="submit" value="submit" class="btn cart-submit d-block">Add to
-                                cart</button>
+                            <input disabled="disabled"  type="submit" value="Add to Cart" class="btn cart-submit d-block"  >
+                                
                             <a style="padding-top: 1em;" href="" class="f btn cart-submit d-block">Add to wishlist</a>
                         </div>
                     </form>
@@ -826,4 +826,14 @@
             }
         })
     })--}}
+{{!-- </script> --}}
+<script>
+    $(function(){
+    $("input[type='radio']").change(function(){
+
+        $("input[type='submit']").prop("disabled", false);
+        //Or
+        //$("input[type='submit']").removeAttr("disabled");
+    });
+});
 </script>

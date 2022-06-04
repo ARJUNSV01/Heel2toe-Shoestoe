@@ -335,9 +335,27 @@ router.post("/submit-reviews/:id",verifyLogin,(req, res) => {
 router.get('/sortedProducts/:id',(req,res)=>{ 
   let gender=req.session.gender
   let userData=req.session.user
-  productHelper.getSortedProducts(req.params.id,gender).then((menProducts)=>{  
+  let category=req.session.category
+  
+  productHelper.getSortedProducts(req.params.id,gender,category).then((menProducts)=>{  
     res.render('user/shopping',{menProducts,userData,user:true})
   })
 
+})
+router.get('/shopByCategory/:id',(req,res)=>{
+  let gender=req.session.gender
+ req.session.category=req.params.id
+ let category=req.session.category
+  productHelper.shopByCategory(req.params.id,gender).then((menProducts)=>{
+    res.render('user/shopping',{user:true,menProducts})
+  })
+})
+router.get('/shopByBrands/:id',(req,res)=>{
+  req.session.brand=req.params.id
+  let gender=req.session.gender
+  let category=req.session.category
+  productHelper.shopByBrands(req.params.id,category,gender).then((menProducts)=>{
+    res.render('user/shopping',{user:true,menProducts})
+  })
 })
 module.exports = router;

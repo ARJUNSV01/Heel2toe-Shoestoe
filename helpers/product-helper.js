@@ -33,7 +33,7 @@ module.exports = {
       price: productDetails.price,
       discount: productDetails.discount,
       netprice: (productDetails.price * (100 - productDetails.discount)) / 100,
-      occassion: productDetails.occassion,
+      // occassion: productDetails.occassion,
       gender: productDetails.gender,
       deleted: false,
     };
@@ -187,7 +187,7 @@ module.exports = {
               "products.$.brand": updatedInfo.brand,
               "products.$.price": updatedInfo.price,
               "products.$.discount": updatedInfo.discount,
-              "products.$.occassion": updatedInfo.occassion,
+              // "products.$.occassion": updatedInfo.occassion,
               "products.$.gender": updatedInfo.gender,
               "products.$.netprice":
                 (updatedInfo.price * (100 - updatedInfo.discount)) / 100,
@@ -315,7 +315,7 @@ module.exports = {
           { $unwind: "$products" },
           { $project: { products: 1, _id: 0 } },
           { $match: { "products.deleted": false } },
-          { $sort: { "products.addedOn": 1 } },
+          { $sort: { "products.addedOn": -1 } },
           { $limit: 10 },
         ])
         .toArray();
@@ -323,9 +323,12 @@ module.exports = {
       resolve(pro);
     });
   },
-  getSortedProducts: (sortBy,gender) => {
+  getSortedProducts: (sortBy,gender,category) => {
     return new Promise(async (resolve, reject) => {
       console.log(sortBy);
+      console.log(category);
+      if(category=='all')
+      category=null
       //   if(sort=='addedOn'){
       //  let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
       //     {$unwind:'$products'},
@@ -365,22 +368,50 @@ module.exports = {
       var sortedProducts;
       switch (sortBy) {
         case "addedOn":
+          if(category){
           sortedProducts = await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.addedOn": 1 } },
+              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
+              { $sort: { "products.addedOn": -1 } },
             ])
             .toArray();
           console.log(sortedProducts);
           resolve(sortedProducts);
-
+          }else{
+            sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              {$match:{'products.gender':gender}},
+              { $sort: { "products.addedOn": -1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+          }
           break;
         case "netPricelowtohigh":
+          if(category){
           sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+               {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
+              { $sort: { "products.netprice": 1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+          }else{
+            sortedProducts = await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
             .aggregate([
@@ -392,10 +423,24 @@ module.exports = {
             .toArray();
           console.log(sortedProducts);
           resolve(sortedProducts);
-
+          }
           break;
         case "netPricehightolow":
+          if(category){
           sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
+              { $sort: { "products.netprice": -1 } },
+            ])
+            .toArray();
+          console.log(sortedProducts);
+          resolve(sortedProducts);
+          }else{
+            sortedProducts = await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
             .aggregate([
@@ -406,30 +451,116 @@ module.exports = {
             ])
             .toArray();
           console.log(sortedProducts);
-          resolve(sortedProducts);
-
+          resolve(sortedProducts); 
+          }
           break;
         case "rating":
+          if(category){
           sortedProducts = await db
             .get()
             .collection(collection.VENDOR_COLLECTION)
             .aggregate([
               { $unwind: "$products" },
               { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.avgRating": 1 } },
+              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
+              { $sort: { "products.avgRating": -1 } },
             ])
             .toArray();
           console.log(true, sortedProducts);
           resolve(sortedProducts);
-
+          }else{
+            sortedProducts = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              { $unwind: "$products" },
+              { $project: { products: 1, _id: 0 } },
+              {$match:{'products.gender':gender}},
+              { $sort: { "products.avgRating": -1 } },
+            ])
+            .toArray();
+          console.log(true, sortedProducts);
+          resolve(sortedProducts);
+          }
           break;
 
         default:
           break;
       }
     });
+  },shopByCategory:(category,gender)=>{
+    console.log(category);
+    return new Promise(async(resolve,reject)=>{
+    if(category =='all'){
+      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+        {$unwind:'$products'},
+        {$project:{products:1,_id:0}},
+        {$match:{'products.gender':gender}},
+
+      ]).toArray()
+      resolve(products)
+    
+      }else{
+        let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+          {$unwind:'$products'},
+          {$project:{products:1,_id:0}},
+          {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
+
+        ]).toArray()
+        resolve(products)
+        
+      } 
+        
+    })
   },
+  shopByBrands:(brand,category,gender)=>{
+    brand=brand.toUpperCase()
+    if(category=='all')
+    category=null
+    return new Promise(async(resolve,reject)=>{
+      if(category){
+      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+        {$unwind:'$products'},
+        {$project:{products:1,_id:0}},
+        {$match:{$and:[{'products.gender':gender},{'products.category':category},{'products.brand':brand}]}}
+      ]).toArray()
+      console.log(products);
+      resolve(products)
+    }else{
+      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+        {$unwind:'$products'},
+        {$project:{products:1,_id:0}},
+        {$match:{$and:[{'products.gender':gender},{'products.brand':brand}]}}
+      ]).toArray()
+      console.log(products);
+      resolve(products)
+    }
+    })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // addToCart: (size, productid, userId) => new Promise(async (resolve, reject) => {
   //   console.log(userId);
   //   const product = await db.get().collection(collection.USER_COLLECTION).aggregate([
