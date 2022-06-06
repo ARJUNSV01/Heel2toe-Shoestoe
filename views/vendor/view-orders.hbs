@@ -25,12 +25,13 @@
                                             <th>Price</th>
                                             
                                            <th>Payment status</th>
+                                           <th>Order Status</th>
                                             <th>View</th>
                                            
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
+                                    {{!-- <tfoot>
                                         <tr>
                                             <th>ProductId</th>
                                             <th>Title</th>
@@ -41,7 +42,7 @@
                                           
                                             <th>Delete</th>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot> --}}
                                     <tbody>
             {{#each orders}}
             
@@ -56,6 +57,15 @@
                 <td> Rs.{{this.orders.totalAmount}} </td>
                 
                 <td>{{this.orders.status}}</td>
+                <td>{{#if this.orders.orderStatus}}
+                   
+                    <p>Shipped</p>
+                    {{else}}
+                    <p>Confirmed</p>
+                    
+                    <a href="/vendor/shipOrder/{{this.orders.orderId}}" class="btn btn-primary">Ship</a>
+                    {{/if}}
+                </td>
                 <td><a href="/vendor/viewOrders/orderedItems/{{this.orders.orderId}}" class=""><p class="text-primary fw-bold">VIEW</p></a></td>
                 <td><a href="/vendor/home/viewproducts/delete/{{this.products._id}}"class="" onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')"><p class="text-danger fw-bold">DELETE</p></a></td>
                
@@ -79,7 +89,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2020</span>
+                        <span>Copyright &copy; Heel2toe</span>
                     </div>
                 </div>
             </footer>

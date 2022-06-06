@@ -368,6 +368,13 @@ module.exports = {
     let user = await db.get().collection(collection.USER_COLLECTION).findOne({_id:ObjectId(userId)})
     let orders = user.orders
     resolve(orders)
+    // let user = await db.get().collection(collection.USER_COLLECTION).aggregate([
+    //   {$match:{_id:ObjectId(userId)}},
+    //   {$project:{orders:1,_id:0}},
+    //   {$unwind:'$orders'},
+    //   {$sort:{'orders.time':-1}}
+    // ]).toArray()
+    // console.log(user);
     });
   },
   getOrderedProducts:(orderId)=>{
@@ -386,9 +393,18 @@ module.exports = {
        let x = await  db.get().collection(collection.USER_COLLECTION).aggregate([
           {$unwind:'$orders'},
           {$match:{'orders.productDetails.vendorId':ObjectId(vendorId)}},
+          {$sort:{'orders.time':-1}}
           
          ]).toArray()
+         console.log(x);
          resolve(x)
       })
+  },shipOrder:(orderId)=>{
+    return new Promise(async(resolve,reject)=>{
+      let result = await db.get().collection(collection.USER_COLLECTION).findOneAndUpdate({'orders.orderId':ObjectId(orderId)},
+      {$set:{'orders.$.orderStatus':'Shipped'}})
+      console.log(result);
+      resolve()
+    })
   }
 };

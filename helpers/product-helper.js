@@ -124,9 +124,14 @@ module.exports = {
           sum = sum + one.rating;
         }
         let avg = parseInt(sum / reviews.length);
-        
-        await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
-        {$set:{'products.$.avgRating':avg}})
+
+        await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .updateOne(
+            { "products._id": ObjectId(productId) },
+            { $set: { "products.$.avgRating": avg } }
+          );
         let avgRating = function (avg) {
           //   if (avg == 1) {
           //     const verypoor = true;
@@ -261,7 +266,6 @@ module.exports = {
 
   shoppingViewProducts: (gender) =>
     new Promise(async (resolve, reject) => {
-      
       const menProducts = await db
         .get()
         .collection(collection.VENDOR_COLLECTION)
@@ -281,6 +285,109 @@ module.exports = {
         .toArray();
       resolve(menProducts);
     }),
+  getBrands: () => {
+    return new Promise(async (resolve, reject) => {
+      let brands = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          { $unwind: "$products" },
+          { $group: { _id: { x: "$products.brand" } } },
+        ])
+        .toArray();
+      console.log(true, brands);
+      resolve(brands);
+    });
+  },
+  getCategories: () => {
+    return new Promise(async (resolve, reject) => {
+      let categories = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          { $unwind: "$products" },
+          { $group: { _id: { y: "$products.category" } } },
+        ])
+        .toArray();
+      console.log(true, categories);
+      resolve(categories);
+    });
+  },
+
+  filterProducts: (filter, catFilter, gender) => {
+    return new Promise(async (resolve, reject) => {
+      if (catFilter.length>1 && filter.length>2) {
+        let result = await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .aggregate([
+            {
+              $unwind: "$products",
+            },
+            {
+              // $match: { $or: filter }
+              $match: { $and: [{ $or: filter }, { $or: catFilter }] },
+            },
+            {
+              $match: { "products.gender": gender },
+            },
+            {
+              $project: { products: 1, _id: 0 },
+            },
+          ])
+          .toArray();
+        console.log(result);
+        resolve(result);
+      }
+      if (filter.length>1) {
+        let result = await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .aggregate([
+            {
+              $unwind: "$products",
+            },
+            {
+              $match: { $or: filter },
+            },
+            {
+              $match: { "products.gender": gender },
+            },
+            {
+              $project: { products: 1, _id: 0 },
+            },
+          ])
+          .toArray();
+        // console.log(3984989489348934893489394394398493);
+        console.log(result);
+        resolve(result);
+      }if(catFilter.length>1){
+        let result = await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .aggregate([
+            {
+              $unwind: "$products",
+            },
+            {
+              $match: { $or: catFilter },
+            },
+            {
+              $match: { "products.gender": gender },
+            },
+            {
+              $project: { products: 1, _id: 0 },
+            },
+          ])
+          .toArray();
+        // console.log(3984989489348934893489394394398493);
+        console.log(result);
+        resolve(result);
+      }
+     
+    });
+  },
+
   submitReviews: (reviews, userId) => {
     return new Promise(async (resolve, reject) => {
       let user = await db
@@ -322,13 +429,23 @@ module.exports = {
       console.log(true, pro);
       resolve(pro);
     });
-  },
-  getSortedProducts: (sortBy,gender,category) => {
-    return new Promise(async (resolve, reject) => {
-      console.log(sortBy);
-      console.log(category);
-      if(category=='all')
-      category=null
+  },getSortedProducts:(sortBy)=>{
+    return new Promise(async(resolve,reject)=>{
+    let result=  await db.get().collection(collection.v)
+    })
+  }
+
+
+
+
+
+  // getSortedProducts: (sortBy, gender, category) => {
+  //   return new Promise(async (resolve, reject) => {
+  //     console.log(sortBy);
+  //     console.log(category);
+  //     if (category == "all") category = null;
+
+  //aslmdlmalmdslamd,.,mas,dklamsdklamdkasldklaskdnksdnkjdsfkjlsnkldfnaskldnaslk
       //   if(sort=='addedOn'){
       //  let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
       //     {$unwind:'$products'},
@@ -365,201 +482,218 @@ module.exports = {
       //   console.log(sortedProducts);
       //   resolve(sortedProducts)
       // }
-      var sortedProducts;
-      switch (sortBy) {
-        case "addedOn":
-          if(category){
-          sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
-              { $sort: { "products.addedOn": -1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts);
-          }else{
-            sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.addedOn": -1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts);
-          }
-          break;
-        case "netPricelowtohigh":
-          if(category){
-          sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-               {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
-              { $sort: { "products.netprice": 1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts);
-          }else{
-            sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.netprice": 1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts);
-          }
-          break;
-        case "netPricehightolow":
-          if(category){
-          sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
-              { $sort: { "products.netprice": -1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts);
-          }else{
-            sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.netprice": -1 } },
-            ])
-            .toArray();
-          console.log(sortedProducts);
-          resolve(sortedProducts); 
-          }
-          break;
-        case "rating":
-          if(category){
-          sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
-              { $sort: { "products.avgRating": -1 } },
-            ])
-            .toArray();
-          console.log(true, sortedProducts);
-          resolve(sortedProducts);
-          }else{
-            sortedProducts = await db
-            .get()
-            .collection(collection.VENDOR_COLLECTION)
-            .aggregate([
-              { $unwind: "$products" },
-              { $project: { products: 1, _id: 0 } },
-              {$match:{'products.gender':gender}},
-              { $sort: { "products.avgRating": -1 } },
-            ])
-            .toArray();
-          console.log(true, sortedProducts);
-          resolve(sortedProducts);
-          }
-          break;
+      //sandklandsklnaskldnaklsdnklasndklansdklansdklnasdklasdklnklnkslankldnakldnaslkdnakjndklansdklasnkladsnlkds
+  //     var sortedProducts;
+  //     switch (sortBy) {
+  //       case "addedOn":
+  //         if (category) {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               {
+  //                 $match: {
+  //                   $and: [
+  //                     { "products.gender": gender },
+  //                     { "products.category": category },
+  //                   ],
+  //                 },
+  //               },
+  //               { $sort: { "products.addedOn": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         } else {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               { $match: { "products.gender": gender } },
+  //               { $sort: { "products.addedOn": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         }
+  //         break;
+  //       case "netPricelowtohigh":
+  //         if (category) {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               {
+  //                 $match: {
+  //                   $and: [
+  //                     { "products.gender": gender },
+  //                     { "products.category": category },
+  //                   ],
+  //                 },
+  //               },
+  //               { $sort: { "products.netprice": 1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         } else {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               { $match: { "products.gender": gender } },
+  //               { $sort: { "products.netprice": 1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         }
+  //         break;
+  //       case "netPricehightolow":
+  //         if (category) {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               {
+  //                 $match: {
+  //                   $and: [
+  //                     { "products.gender": gender },
+  //                     { "products.category": category },
+  //                   ],
+  //                 },
+  //               },
+  //               { $sort: { "products.netprice": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         } else {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               { $match: { "products.gender": gender } },
+  //               { $sort: { "products.netprice": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(sortedProducts);
+  //           resolve(sortedProducts);
+  //         }
+  //         break;
+  //       case "rating":
+  //         if (category) {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               {
+  //                 $match: {
+  //                   $and: [
+  //                     { "products.gender": gender },
+  //                     { "products.category": category },
+  //                   ],
+  //                 },
+  //               },
+  //               { $sort: { "products.avgRating": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(true, sortedProducts);
+  //           resolve(sortedProducts);
+  //         } else {
+  //           sortedProducts = await db
+  //             .get()
+  //             .collection(collection.VENDOR_COLLECTION)
+  //             .aggregate([
+  //               { $unwind: "$products" },
+  //               { $project: { products: 1, _id: 0 } },
+  //               { $match: { "products.gender": gender } },
+  //               { $sort: { "products.avgRating": -1 } },
+  //             ])
+  //             .toArray();
+  //           console.log(true, sortedProducts);
+  //           resolve(sortedProducts);
+  //         }
+  //         break;
 
-        default:
-          break;
-      }
-    });
-  },shopByCategory:(category,gender)=>{
-    console.log(category);
-    return new Promise(async(resolve,reject)=>{
-    if(category =='all'){
-      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-        {$unwind:'$products'},
-        {$project:{products:1,_id:0}},
-        {$match:{'products.gender':gender}},
-
-      ]).toArray()
-      resolve(products)
-    
-      }else{
-        let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-          {$unwind:'$products'},
-          {$project:{products:1,_id:0}},
-          {$match:{$and:[{'products.gender':gender},{'products.category':category}]}},
-
-        ]).toArray()
-        resolve(products)
-        
-      } 
-        
-    })
-  },
-  shopByBrands:(brand,category,gender)=>{
-    brand=brand.toUpperCase()
-    if(category=='all')
-    category=null
-    return new Promise(async(resolve,reject)=>{
-      if(category){
-      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-        {$unwind:'$products'},
-        {$project:{products:1,_id:0}},
-        {$match:{$and:[{'products.gender':gender},{'products.category':category},{'products.brand':brand}]}}
-      ]).toArray()
-      console.log(products);
-      resolve(products)
-    }else{
-      let products=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-        {$unwind:'$products'},
-        {$project:{products:1,_id:0}},
-        {$match:{$and:[{'products.gender':gender},{'products.brand':brand}]}}
-      ]).toArray()
-      console.log(products);
-      resolve(products)
-    }
-    })
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  //       default:
+  //         break;
+  //     }
+  //   });
+  // },
+  // shopByCategory: (category, gender) => {
+  //   console.log(category);
+  //   return new Promise(async (resolve, reject) => {
+  //     if (category == "all") {
+  //       let products = await db
+  //         .get()
+  //         .collection(collection.VENDOR_COLLECTION)
+  //         .aggregate([
+  //           { $unwind: "$products" },
+  //           { $project: { products: 1, _id: 0 } },
+  //           { $match: { "products.gender": gender } },
+  //         ])
+  //         .toArray();
+  //       resolve(products);
+  //     } else {
+  //       let products = await db
+  //         .get()
+  //         .collection(collection.VENDOR_COLLECTION)
+  //         .aggregate([
+  //           { $unwind: "$products" },
+  //           { $project: { products: 1, _id: 0 } },
+  //           {
+  //             $match: {
+  //               $and: [
+  //                 { "products.gender": gender },
+  //                 { "products.category": category },
+  //               ],
+  //             },
+  //           },
+  //         ])
+  //         .toArray();
+  //       resolve(products);
+  //     }
+  //   });
+  // },
+  // shopByBrands: (brand, category, gender) => {
+  //   brand = brand.toUpperCase();
+  //   console.log(brand, category, gender);
+  //   return new Promise(async (resolve, reject) => {
+  //     let products = await db
+  //       .get()
+  //       .collection(collection.VENDOR_COLLECTION)
+  //       .aggregate([
+  //         { $unwind: "$products" },
+  //         { $project: { products: 1, _id: 0 } },
+  //         {
+  //           $match: {
+  //             $and: [
+  //               { "products.gender": gender },
+  //               { "products.brand": brand },
+  //             ],
+  //           },
+  //         },
+  //       ])
+  //       .toArray();
+  //     console.log(products);
+  //     resolve(products);
+  //   });
+  // },
 
   // addToCart: (size, productid, userId) => new Promise(async (resolve, reject) => {
   //   console.log(userId);

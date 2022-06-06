@@ -8,7 +8,8 @@ const orderHelper = require("../helpers/order-helper");
 const { ObjectId } = require("mongodb");
 var db = require("../config/connection");
 var collection = require("../config/collections");
-
+const session = require("express-session");
+var menProducts
 let verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -22,15 +23,16 @@ let userBlocked = (req, res, next) => {
     next();
   } else {
     req.session.loggedIn = false;
+    req.session.user = false;
     res.render("user/userlogin", { blockeduser: req.session.blocked });
   }
 };
 
 router.get("/", (req, res) => {
   let userData = req.session.user;
-  productHelper.getLatestProducts().then((latestProducts)=>{
-  res.render("user/home", { userData, user: true,latestProducts });
-  })
+  productHelper.getLatestProducts().then((latestProducts) => {
+    res.render("user/home", { userData, user: true, latestProducts });
+  });
 });
 
 router.get("/login", function (req, res) {
@@ -84,27 +86,63 @@ router.post("/login", (req, res) => {
 
 router.get("/shopping/:id", async (req, res) => {
   let userData = req.session.user;
-  req.session.gender=req.params.id
-  try {
-    productHelper.shoppingViewProducts(req.params.id).then((menProducts) => {
-     
-      res.render("user/shopping", { user: true, userData, menProducts });
-    
+  req.session.gender = req.params.id;
+  // try {
+  //   productHelper.shoppingViewProducts(req.params.id).then((menProducts) => {
+  //     productHelper.getBrands().then((brands)=>{
+  //       res.render("user/shopping", { user: true, userData, menProducts ,brands});
+  //     })
+      
+  //   });
+  // } catch (err) {
+  //   console.log(err);
+  // }
+  productHelper.shoppingViewProducts(req.params.id).then((response)=>{
+ menProducts=response
+ res.redirect('/products')
   })
-  } catch (err) {
-    console.log(err);
-  }
 });
+router.get('/products',(req,res)=>{
+  let userData = req.session.user;
+  productHelper.getBrands().then((brands)=>{
+    let categories=productHelper.getCategories().then((categories)=>{
+      res.render("user/shopping", { user: true, userData, menProducts ,brands,categories});
+    })
+    // console.log(true,pro);
+       
+      
+    })
+
+})
+router.post('/products/filter',(req,res)=>{
+  console.log(req.body ,'kljlkjhjjhj');
+  let a=req.body
+  let filter=[]
+for(let i of a.brandName){
+  filter.push({'products.brand':i})
+  
+}
+let catFilter=[]
+for(let i of a.category){
+  catFilter.push({'products.category':i})
+}
+console.log(true,filter,false);
+let gender=req.session.gender
+productHelper.filterProducts(filter,catFilter,gender).then((response)=>{
+menProducts=response
+console.log(false,menProducts);
+res.json({status:true})
+})
+})
 
 router.get("/shopping/view/:id", async (req, res) => {
   let userData = req.session.user;
   let productId = req.params.id;
   try {
     productHelper.getProductDetails(req.params.id).then((product) => {
-      let avgRating=product.avgRating
-      let reviews=product.reviews
-      
-      
+      let avgRating = product.avgRating;
+      let reviews = product.reviews;
+
       if (
         product.products.gender == "men" ||
         product.products.gender == "women"
@@ -118,7 +156,7 @@ router.get("/shopping/view/:id", async (req, res) => {
         productId,
         adult,
         avgRating,
-        reviews
+        reviews,
       });
     });
   } catch (err) {
@@ -211,7 +249,13 @@ router.get("/checkout", (req, res) => {
     if (cartDetails.length != 0) {
       res.render("user/checkout", { user: true, userData, cartDetails });
     } else {
-      res.render("user/cart");
+      req.session.emptyCart = true;
+      res.render("user/cart", {
+        user: true,
+        userData,
+        emptyCart: req.session.emptyCart,
+      });
+      req.session.emptyCart = false;
     }
   });
 });
@@ -220,6 +264,7 @@ router.post("/updateAddress", async (req, res) => {
   console.log(cart);
 
   orderHelper.placeOrder(req.session.user, req.body, cart).then((details) => {
+    req.session.orderId = details.orderId;
     console.log(details);
     if (req.body.modeofpayment == "cod") {
       orderHelper.changeQtyAfterOrder(req.session.user._id);
@@ -271,6 +316,17 @@ router.post("/verify-payment", (req, res) => {
 });
 router.get("/orderSuccess", (req, res) => {
   res.render("user/paymentConf");
+});
+
+router.get("/orderSummary", (req, res) => {
+  try {
+    let userData = req.session.user;
+    orderHelper.getOrderedProducts(req.session.orderId).then((orderDetails) => {
+      res.render("user/orderSummary", { orderDetails, user: true, userData });
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.get("/editProfile/:id", verifyLogin, (req, res) => {
@@ -326,36 +382,42 @@ router.get("/orderedItems/:id", verifyLogin, (req, res) => {
     });
   });
 });
-router.post("/submit-reviews/:id",verifyLogin,(req, res) => {
+router.post("/submit-reviews/:id", verifyLogin, (req, res) => {
   productHelper.submitReviews(req.body, req.session.user._id).then(() => {
     // res.json({ status: true });
-    res.redirect("/shopping/view/"+req.params.id)
+    res.redirect("/shopping/view/" + req.params.id);
   });
 });
-router.get('/sortedProducts/:id',(req,res)=>{ 
-  let gender=req.session.gender
-  let userData=req.session.user
-  let category=req.session.category
-  
-  productHelper.getSortedProducts(req.params.id,gender,category).then((menProducts)=>{  
-    res.render('user/shopping',{menProducts,userData,user:true})
-  })
-
+// router.get("/sortedProducts/:id", (req, res) => {
+//   let gender = req.session.gender;
+//   let userData = req.session.user;
+//   let category = req.session.category;
+//   let brand = req.session.brand;
+//   productHelper
+//     .getSortedProducts(req.params.id, gender, category, brand)
+//     .then((menProducts) => {
+//       res.render("user/shopping", { menProducts, userData, user: true });
+//     });
+// });
+router.get('/sortedProducts/:id',(req,res)=>{
+  console.log();
 })
-router.get('/shopByCategory/:id',(req,res)=>{
-  let gender=req.session.gender
- req.session.category=req.params.id
- let category=req.session.category
-  productHelper.shopByCategory(req.params.id,gender).then((menProducts)=>{
-    res.render('user/shopping',{user:true,menProducts})
-  })
-})
-router.get('/shopByBrands/:id',(req,res)=>{
-  req.session.brand=req.params.id
-  let gender=req.session.gender
-  let category=req.session.category
-  productHelper.shopByBrands(req.params.id,category,gender).then((menProducts)=>{
-    res.render('user/shopping',{user:true,menProducts})
-  })
-})
+router.get("/shopByCategory/:id", (req, res) => {
+  let gender = req.session.gender;
+  req.session.category = req.params.id;
+  let category = req.session.category;
+  productHelper.shopByCategory(req.params.id, gender).then((menProducts) => {
+    res.render("user/shopping", { user: true, menProducts });
+  });
+});
+router.get("/shopByBrands/:id", (req, res) => {
+  req.session.brand = req.params.id;
+  let gender = req.session.gender;
+  let category = req.session.category;
+  productHelper
+    .shopByBrands(req.params.id, category, gender)
+    .then((menProducts) => {
+      res.render("user/shopping", { user: true, menProducts });
+    });
+});
 module.exports = router;

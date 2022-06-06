@@ -15,15 +15,16 @@
                     <table id="datatablesSimple">
                         <thead>
                             <tr>
-                                <th>UserId</th>
+                                <th>VendorId</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Gender</th>
                                 <th>Address</th>
+                                
                                 <th>View Orders</th>
                                 {{!-- <th>View Cart</th> --}}
-                                <th>Block User</th>
-                                <th>Delete User</th>
+                                <th>Block Vendor</th>
+                                <th>Delete Vendor</th>
 
                             </tr>
                         </thead>
@@ -34,7 +35,7 @@
                                 <td>{{this.firstname}} {{this.lastname}}</td>
                                 <td>{{this.email}}</td>
                                 <td>{{this.gender}}</td>
-                                <td></td>
+                                <td>{{this.address}}</td>
                                 <td><a href="/admin/viewVendors/vendorOrders/{{this._id}}" class="btn btn-success">ORDERS</a></td>
                                 {{!-- <td><a href="" class="btn btn-info">CART</a></td> --}}
                                 {{#if this.isActive}}

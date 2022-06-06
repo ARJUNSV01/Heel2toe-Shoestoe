@@ -206,7 +206,11 @@ router.get("/viewOrders/orderedItems/:id", (req, res) => {
     res.render("vendor/ordered-items", { vendor: true, orders, productDetails,vendorData });
   });
 });
-
+router.get('/shipOrder/:id',(req,res)=>{
+  orderHelper.shipOrder(req.params.id).then(()=>{
+    res.redirect('/vendor/viewOrders')
+  })
+})
 router.get("/logout", (req, res) => {
   req.session.vendorLogged = false;
   res.redirect("/vendor/login");

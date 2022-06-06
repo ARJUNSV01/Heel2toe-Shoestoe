@@ -266,7 +266,7 @@ href="/sortedProducts/rating"       --}}
             <div class="filter-content collapse show" id="collapse_1" style="">
                 <div class="card-body">
                     
-                    <ul class="list-menu">
+                    {{!-- <ul class="list-menu">
                         <li><a href="/shopByCategory/all" class="fs-5 text-secondary">All Products</a></li>
                         <li><a href="/shopByCategory/casualshoes"class="fs-5 text-secondary">Casual Shoes</a></li>
                         <li><a href="/shopByCategory/formalshoes"class="fs-5 text-secondary">Formal Shoes</a></li>
@@ -279,33 +279,93 @@ href="/sortedProducts/rating"       --}}
                         <li><a href="/shopByCategory/flats"class="fs-5 text-secondary">Flats</a></li>
                         
                    
-                    </ul>
+                    </ul> --}}
+                     {{!-- <form action="/filter" method="POST"> --}}
+                <form method="post" action="/products/filter" id="brandFilter">
+                     
+
+{{!-- <select class="form-select" aria-label="Default select example" name="drop">
+  <option selected>Open this select menu</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select> --}}
+
+
+
+                    {{!-- <input type="text" name="lkf" value="dkjk">
+                    <input type="submit" name="" id="">
+                </form> --}}
+
+                <div class="m-3">
+                    <input type="submit" value="filter" class=" btn btn-success col-12 ">
+                </div>
+                <input class="form-check-input ms-2" type="checkbox" id="flexCheckChecked" name="brandName" value=""
+                    hidden checked>
+                    {{!-- <input class="form-check-input ms-2" type="checkbox" id="flexCheckChecked" name="brandName" value=""
+                    hidden checked> --}}
+
+                {{#each brands}}
+                {{!-- checkbox --}}
+                {{!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div> --}}
+
+                <div class="form-check ms-2">
+                    <input class="form-check-input " type="checkbox" id="flexCheckChecked" name="brandName"
+                        value="{{this._id.x}}">
+                    <p>
+                        <label class="form-check-label ms-5 " for="flexCheckChecked">
+                            {{this._id.x}}
+                        </label>
+                    </p>
+                </div>
+                {{!-- -----checkbox---- --}}
+                {{/each}}
+
+            
+
     
                 </div> <!-- card-body.// -->
             </div>
              <header class="card-header">
-                <a  data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
+                <a  data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down float-right"></i>
                     <h6 class="title">Brands</h6>
                 </a>
             </header> 
-            <div class="filter-content collapse show" id="collapse_1" style="">
+            <div class="filter-content collapse show" id="collapse_4" style="">
                 <div class="card-body">
-                    
-                    <ul class="list-menu">
-                        <li><a href="/shopByBrands/puma"  class=" active fs-5 text-secondary">Puma</a></li>
-                        <li><a href="/shopByBrands/adidas"class="fs-5 text-secondary">Adidas</a></li>
-                        <li><a href="/shopByBrands/nike"class="fs-5 text-secondary">Nike</a></li>
-                        <li><a href="/shopByBrands/fila"class="fs-5 text-secondary">Fila</a></li>
-                        <li><a href="/shopByBrands/crocs"class="fs-5 text-secondary">Crocs</a></li>
-                        <li><a href="/shopByBrands/gucci"class="fs-5 text-secondary">gucci</a></li>
-                        <li><a href="/shopByBrands/redtape"class="fs-5 text-secondary">Red tape</a></li>
-                        {{!-- <li><a href="/shopByBrands/crocs"class="fs-5 text-secondary">Crocs</a></li> --}}
-                        
-                        
-                   
-                    </ul>
-    
+                     <input class="form-check-input ms-2" type="checkbox" id="flexCheckChecked" name="category" value=""
+                    hidden checked>
+                    {{!-- <input class="form-check-input ms-2" type="checkbox" id="flexCheckChecked" name="brandName" value=""
+                    hidden checked> --}}
+                     {{#each categories}}
+                {{!-- checkbox --}}
+                {{!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Default checkbox
+                    </label>
+                </div> --}}
+                
+
+                <div class="form-check ms-2">
+                    <input class="form-check-input " type="checkbox" id="flexCheckChecked" name="category"
+                        value="{{this._id.y}}">
+                    <p>
+                        <label class="form-check-label ms-5 " for="flexCheckChecked">
+                            {{this._id.y}}
+                        </label>
+                    </p>
+                </div>
+                {{!-- -----checkbox---- --}}
+                {{/each}}
+
+    </form>
                 </div> <!-- card-body.// -->
             </div> 
         </article> <!-- filter-group  .// -->
@@ -316,7 +376,7 @@ href="/sortedProducts/rating"       --}}
                     <h6 class="title">Sizes </h6>
                 </a>
             </header>
-            <div class="filter-content collapse show" id="collapse_4" style="">
+            <div class="filter-content collapse show" id="collapse" style="">
                 <div class="card-body">
                   <label class="checkbox-btn">
                     <input type="checkbox">
@@ -390,8 +450,8 @@ href="/sortedProducts/rating"       --}}
 
                     </div>
                                         {{!-- col-lg-9 --}}
-                    <div class="col-12 col-md-8 col-lg-9"> 
-                        <div class="shop_grid_product_area">
+                    <div class="col-12 col-md-8 col-lg-9" > 
+                        <div class="shop_grid_product_area "id="filteredProducts">
                             <div class="row">
 
                                 <!-- Single gallery Item -->
@@ -438,79 +498,7 @@ href="/sortedProducts/rating"       --}}
             </div>
         </section>
 
-        <!-- ****** Footer Area Start ****** -->
-        <footer class="footer_area">
-            <div class="container">
-                <div class="row">
-                    <!-- Single Footer Area Start -->
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <div class="single_footer_area">
-                            <div class="footer-logo">
-                                <img src="/images/img/core-img/logo.png" alt="">
-                            </div>
-                            <div class="copywrite_text d-flex align-items-center">
-                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp; distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Single Footer Area Start -->
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-2">
-                        <div class="single_footer_area">
-                            <ul class="footer_widget_menu">
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">Faq</a></li>
-                                <li><a href="#">Returns</a></li>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Single Footer Area Start -->
-                    <div class="col-12 col-sm-6 col-md-3 col-lg-2">
-                        <div class="single_footer_area">
-                            <ul class="footer_widget_menu">
-                                <li><a href="#">My Account</a></li>
-                                <li><a href="#">Shipping</a></li>
-                                <li><a href="#">Our Policies</a></li>
-                                <li><a href="#">Afiliates</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- Single Footer Area Start -->
-                    <div class="col-12 col-lg-5">
-                        <div class="single_footer_area">
-                            <div class="footer_heading mb-30">
-                                <h6>Subscribe to our newsletter</h6>
-                            </div>
-                            <div class="subscribtion_form">
-                                <form action="#" method="post">
-                                    <input type="email" name="mail" class="mail" placeholder="Your email here">
-                                    <button type="submit" class="submit">Subscribe</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="line"></div>
-  <ul id="pagination-demo" class="pagination-sm"></ul>
-                <!-- Footer Bottom Area Start -->
-                <div class="footer_bottom_area">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="footer_social_area text-center">
-                                <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- ****** Footer Area End ****** -->
+        
     </div>
     <!-- /.wrapper end -->
     {{!-- <script src="/javascripts/js/jquery/jquery-2.2.4.min.js"></script>
@@ -522,7 +510,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="/javascripts/js/plugins.js"></script>
     <!-- Active js -->
     <script src="/javascripts/js/active.js"></script> --}}
-
+{{!-- 
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> --}}
+

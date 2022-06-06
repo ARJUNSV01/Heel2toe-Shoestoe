@@ -1,4 +1,4 @@
-const { response } = require("express");
+
 
 function deleteItem(cartId) {
     $.ajax({
@@ -55,5 +55,29 @@ function deleteItem(cartId) {
   //     }
   //   })
   // }
+
+    $('#brandFilter').submit((e)=>{
+    e.preventDefault()
+    $.ajax({
+      url:'/products/filter',
+      method:'post',
+      data:$('#brandFilter').serialize(),
+      success:(status)=>{
+          
+         
+        // if(status){
+        //   console.log(status)
+            $('#filteredProducts').load(location.href + " #filteredProducts"); 
+
+        //  $('#filteredProducts').load(location.href + " #filteredProducts");
+          
+      }
+    })
+  })
+
+  // $('input[name=brandName')
+
   
+    
+
   
