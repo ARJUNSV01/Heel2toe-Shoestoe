@@ -14,7 +14,7 @@ module.exports = {
         .aggregate([
           { $match: { email: vendorData.email } },
           { $unwind: "$products" },
-          { $match: { "products.deleted": false } },
+
           { $project: { products: 1, _id: 0 } },
         ])
         .toArray();
@@ -95,6 +95,22 @@ module.exports = {
   deleteProducts: (vendorId, productId) => {
     console.log(vendorId);
     return new Promise(async (resolve, reject) => {
+      let check=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+        {$unwind:'$products'},
+        {$match:{'products._id':ObjectId(productId)}},
+        {$project:{products:1,_id:0}}
+      ]).toArray()
+      check=check[0].products.deleted
+      if(check){
+        const data = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .updateOne(
+          { "products._id": ObjectId(productId) },
+          { $set: { "products.$.deleted": false } }
+        );
+      resolve();
+      }else{
       const data = await db
         .get()
         .collection(collection.VENDOR_COLLECTION)
@@ -103,6 +119,7 @@ module.exports = {
           { $set: { "products.$.deleted": true } }
         );
       resolve();
+        }
     });
   },
   getProductDetails: (productId) =>
@@ -329,7 +346,7 @@ module.exports = {
               $match: { $and: [{ $or: brandFilter }, { $or: catFilter }] },
             },
             {
-              $match: { "products.gender": gender },
+              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
             },
             {
               $project: { products: 1, _id: 0 },
@@ -351,7 +368,7 @@ module.exports = {
               $match: { $or: brandFilter },
             },
             {
-              $match: { "products.gender": gender },
+              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
             },
             {
               $project: { products: 1, _id: 0 },
@@ -373,7 +390,7 @@ module.exports = {
               $match: { $or: catFilter },
             },
             {
-              $match: { "products.gender": gender },
+              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
             },
             {
               $project: { products: 1, _id: 0 },
@@ -383,6 +400,25 @@ module.exports = {
         // console.log(3984989489348934893489394394398493);
         console.log(result);
         resolve(result);
+      }else{
+        const result = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          { $unwind: "$products" },
+          {
+            $match: {
+              $and: [
+                { "products.gender": gender },
+                { "products.deleted": false },
+              ],
+            },
+          },
+
+          { $project: { products: 1, _id: 0 } },
+        ])
+        .toArray();
+      resolve(result);
       }
      
     });

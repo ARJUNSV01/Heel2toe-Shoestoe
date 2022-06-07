@@ -1,20 +1,57 @@
-<p class="fs-1 text-center fw-bold text-primary mt-4">Orders</p>
-<div class="container card mt-5" style="overflow-x:auto;"> 
-<table class="table align-middle mb-0 bg-white">
-  <thead class="bg-light">
-    <tr>
-      <th>Sr.no</th>
-      <th>OrderId</th>
-      <th>Mobile</th>
-      <th>Address</th>
-      <th>Ordered On</th>
-      <th>Amount</th>
-      <th>Status</th>
-      <th>Actions</th>
 
-    </tr>
-  </thead>
-  <tbody>
+
+{{!-- asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd --}}
+
+
+
+
+    <!-- Custom styles for this page -->
+    <link href="/javascripts/vendortempfiles/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+
+
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 my-5 text-gray-800 text-center">MANAGE PRODUCTS</h1>
+               
+
+                   
+                    <div class="card shadow mb-4">
+                        
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                      <th>Sr.no</th>
+                                      <th>OrderId</th>
+                                      <th>Mobile</th>
+                                      <th>Address</th>
+                                      <th>Ordered On</th>
+                                      <th>Amount</th>
+                                      
+                                      <th>Delivery Status</th>
+                                      <th>Status</th>
+                                      <th>Actions</th>
+
+                                    </tr>
+                                    </thead>
+                                    {{!-- <tfoot>
+                                        <tr>
+                                            <th>ProductId</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Brand</th>
+                                            <th>Image</th>
+                                            <th>View</th>
+                                            <th>Edit</th>
+                                            <th>Disable/Enable</th>
+                                        </tr>
+                                    </tfoot> --}}
+                                    <tbody>
     {{#each orders}}
     <tr >
       <td><p class="py-5">{{@index}}</p></td>
@@ -42,13 +79,13 @@
       <td><p class="py-5">{{this.deliveryDetails.house}},{{this.deliveryDetails.city}},{{this.deliveryDetails.state}}</p></td>
       <td><p class="py-5">{{this.time}}</p></td>
       <td><p class="py-5">Rs.{{this.totalAmount}}</p></td>
-      <td>
-        {{#if this.orders.orderStatus}}
-        <p class="py-5">Shipped</p>
-        {{else}}
-        <p class="py-5">Confirmed</p>
-        {{/if}}
-      </td>
+      
+      {{#if this.orderStatus}}
+      <td><p class="py-5">{{this.orderStatus}}</p></td>
+      {{else}}
+      <td><p class="py-5">Confirmed</p></td>
+      {{/if}}
+      <td><p class="py-5">{{this.status}}</p></td>
       <td>
          <a href="/orderedItems/{{this.orderId}}" class="btn btn-warning btn-sm btn-rounded my-5"> View </a>
         
@@ -123,6 +160,38 @@
         </button>
       </td>
     </tr> --}}
-  </tbody>
-</table>
-</div>
+  </tbody>                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+ 
+    
+
+    <!-- Page level plugins -->
+    <script src="/javascripts/vendortempfiles/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/vendortempfiles/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/javascripts/vendortempfiles/js/demo/datatables-demo.js"></script>
+

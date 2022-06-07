@@ -406,5 +406,12 @@ module.exports = {
       console.log(result);
       resolve()
     })
+  },cancelOrder:(orderId)=>{
+    return new Promise (async(resolve,reject)=>{
+      let response=await db.get().collection(collection.USER_COLLECTION).updateOne({'orders.orderId':ObjectId(orderId)},
+      {$set:{'orders.$.status':'Cancelled'}})
+      resolve()
+    })
+    
   }
 };

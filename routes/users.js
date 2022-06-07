@@ -115,7 +115,6 @@ router.get('/products',(req,res)=>{
 
 })
 router.post('/products/filter',(req,res)=>{
-  console.log(req.body ,'kljlkjhjjhj');
   let a=req.body
   let filter=[]
 for(let i of a.brandName){
@@ -364,6 +363,7 @@ router.get("/viewOrders/:id", verifyLogin, (req, res) => {
   let userData = req.session.user;
   try {
     orderHelper.getOrderDetails(userData._id).then((orders) => {
+      
       res.render("user/view-orders", { user: true, userData, orders });
     });
   } catch (err) {
@@ -374,14 +374,29 @@ router.get("/orderedItems/:id", verifyLogin, (req, res) => {
   orderHelper.getOrderedProducts(req.params.id).then((orders) => {
     let userData = req.session.user;
     let productDetails = orders.productDetails;
+    if(orders.status=='Cancelled'){
     res.render("user/ordered-items", {
       user: true,
       orders,
       productDetails,
       userData,
+    orderCancelled:true
     });
+  }else{
+    res.render("user/ordered-items", {
+      user: true,
+      orders,
+      productDetails,
+      userData
+    });
+  }
   });
 });
+router.get('/cancelOrder/:id',(req,res)=>{
+  orderHelper.cancelOrder(req.params.id).then(()=>{
+    res.json({status:true})
+  })
+})
 router.post("/submit-reviews/:id", verifyLogin, (req, res) => {
   productHelper.submitReviews(req.body, req.session.user._id).then(() => {
     // res.json({ status: true });
@@ -400,26 +415,22 @@ router.post("/submit-reviews/:id", verifyLogin, (req, res) => {
 //     });
 // });
 router.get('/sortedProducts/:id',(req,res)=>{
-  console.log(menProducts);
   if(req.params.id=='rating'){
   menProducts.sort((a,b)=>{
 return b.products.avgRating-a.products.avgRating
   })
-  console.log(menProducts);
   res.json({status:true})
 }
 if(req.params.id=='netPricelowtohigh'){
   menProducts.sort((a,b)=>{
 return a.products.netprice-b.products.netprice
   })
-  console.log(menProducts);
   res.json({status:true})
 }
 if(req.params.id=='netPricehightolow'){
   menProducts.sort((a,b)=>{
 return b.products.netprice-a.products.netprice
   })
-  console.log(menProducts);
   res.json({status:true})
 }
 })

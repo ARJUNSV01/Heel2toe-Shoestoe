@@ -85,6 +85,16 @@ function sort(sortBy){
     }
   })
 }
+function cancelOrder(orderId){
+  
+  $.ajax({
+    url:'/cancelOrder/'+orderId,
+    method:'get',
+    success(response){
+      window.location.reload()
+    }
+  })
+}
 
   
     

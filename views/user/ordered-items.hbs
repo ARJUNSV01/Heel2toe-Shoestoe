@@ -35,6 +35,12 @@
               <tr><td>{{orders.deliveryDetails.house}},{{orders.deliveryDetails.city}}</td></tr>            
               <tr><td>{{orders.deliveryDetails.pincode}}</td></tr>
               <tr><td>{{userData.phonenumber}}</td></tr>
+              <tr><td><p class="text-light" >asds</p></td></tr>
+              {{#if orderCancelled}}
+             <tr><td><b class="text-danger fs-5">Order Cancelled !!!</b></td></tr> 
+              {{else}}
+              <tr><td><a class="btn btn-outline-dark" onclick="cancelOrder('{{orders.orderId}}')"><b class="text-danger fs-5 mt-5">Cancel Order</b></a></td></tr>
+              {{/if}}
             </table>
         </div>
     </div>
