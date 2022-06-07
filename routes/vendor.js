@@ -71,10 +71,44 @@ router.post("/vendorlogin", (req, res) => {
     }
   });
 });
+
+router.get("/viewProfile/:id", verifyLogin, (req, res) => {
+  try {
+    vendorHelper.getVendorDetails(req.params.id).then((vendorData) => {
+      res.render("vendor/view-profile", { vendor: true, vendorData });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+router.get("/editProfile/:id", verifyLogin, (req, res) => {
+  try {
+    vendorHelper.getVendorDetails(req.params.id).then((vendorData) => {
+      res.render("vendor/profile-edit", {
+        vendor: true,
+        vendorData,
+        updated: req.session.vendorUpdated,
+      });
+      req.session.vendorUpdated = false;
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+router.post("/updateprofile", verifyLogin, (req, res) => {
+    let vendorData = req.session.vendor;
+   console.log(req.body);
+     vendorHelper.updateProfile(req.body, vendorData._id).then(() => {
+       req.session.vendorUpdated = true;
+       res.json({ vendorUpdated: true });
+     });
+   });
 router.get("/home", (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
-    res.render("vendor/home", { vendorData, vendor: true });
+    orderHelper.getTotalRevenue(vendorData._id).then((response)=>{
+      res.render("vendor/home", { vendorData, vendor:true,response });
+    })  
   } else {
     res.redirect("/vendor/login");
   }

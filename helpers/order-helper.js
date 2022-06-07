@@ -6,6 +6,7 @@ const { ObjectId, Collection } = require("mongodb");
 const Razorpay = require("razorpay");
 const { resolve } = require("path");
 const { log } = require("console");
+const { reject } = require("bcrypt/promises");
 var instance = new Razorpay({
   key_id: "rzp_test_i7RAxm8pu7Dno0",
   key_secret: "Um4oamHTKqJ3i9ucFTa4uez2",
@@ -413,5 +414,27 @@ module.exports = {
       resolve()
     })
     
+  },
+  getTotalRevenue:(vendorId)=>{
+    return new Promise(async(resolve,reject)=>{
+      let orders =await db.get().collection(collection.USER_COLLECTION).aggregate([
+        {$unwind:'$orders'},
+        {$match:{'orders.productDetails.vendorId':ObjectId(vendorId)}},
+        {$project:{orders:1,_id:0}}
+      ]).toArray()
+      let revenue=0
+      let count=0
+      for(let oneOrder of orders){
+        if(oneOrder.orders.status=='placed'){
+          count++;
+           revenue=revenue+oneOrder.orders.totalAmount
+        }
+      }
+      let response={
+        revenue:revenue,
+        count:count
+      }
+      resolve(response)
+    })
   }
 };

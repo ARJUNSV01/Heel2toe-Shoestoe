@@ -4,6 +4,7 @@ var db = require("../config/connection");
 var collection = require("../config/collections");
 const bcrypt = require("bcrypt");
 const { reject } = require("bcrypt/promises");
+const { ObjectId } = require("mongodb");
 
 module.exports = {
   vendorSignup: (vendorData) => {
@@ -53,6 +54,36 @@ module.exports = {
         console.log("fail");
         resolve({ status: false });
       }
+    });
+  },
+  updateProfile: (updatedInfo, vendorId) => {
+    console.log(updatedInfo,vendorId);
+    return new Promise(async (resolve, reject) => {
+      await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .updateOne(
+          { _id: ObjectId(vendorId) },
+          {
+            $set: {
+              firstname: updatedInfo.firstname,
+              lastname: updatedInfo.lastname,
+              phonenumber: updatedInfo.phonenumber,
+              email: updatedInfo.email,
+             address:updatedInfo.address
+            },
+          }
+        );
+      resolve();
+    });
+  },getVendorDetails: (vendorId) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.VENDOR_COLLECTION)
+        .findOne({ _id: ObjectId(vendorId) })
+        .then((vendorDetails) => {
+          resolve(vendorDetails);
+        });
     });
   },
 };

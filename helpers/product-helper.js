@@ -23,7 +23,7 @@ module.exports = {
     }),
 
   addProducts: (productDetails, vendorId) => {
-    // console.log(productDetails);
+    console.log(productDetails);
     const products = {
       _id: new ObjectId(),
       addedOn: new Date(),
@@ -33,6 +33,7 @@ module.exports = {
       price: productDetails.price,
       discount: productDetails.discount,
       netprice: (productDetails.price * (100 - productDetails.discount)) / 100,
+      description:productDetails.description,
       // occassion: productDetails.occassion,
       gender: productDetails.gender,
       deleted: false,
@@ -211,6 +212,7 @@ module.exports = {
               "products.$.discount": updatedInfo.discount,
               // "products.$.occassion": updatedInfo.occassion,
               "products.$.gender": updatedInfo.gender,
+              "products.$.description":updatedInfo.description,
               "products.$.netprice":
                 (updatedInfo.price * (100 - updatedInfo.discount)) / 100,
               "products.$.sizesAvailable": [

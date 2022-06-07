@@ -252,15 +252,16 @@ href="/sortedProducts/rating"       --}}
                             </div>
                         </div> --}}
                         {{!-- col-12 --}}
+                         <form method="post" action="/products/filter" id="brandFilter">
                     <div style=" " class="col-10 ms-5 ">
-                      
+                       <input style="background-color: rgba(255, 7, 152, 0.993);" type="submit" value="Filter" class=" text-white fw-bolder mb-4 btn  col-12 ">
             
     <div class="card">
         <article class="filter-group">
             <header class="card-header">
                 <a  data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down float-right"></i>
-                    <h6 class="title">Categories</h6>
+                    <h6 class="title">Brand</h6>
                 </a>
             </header>
             <div class="filter-content collapse show" id="collapse_1" style="">
@@ -281,7 +282,7 @@ href="/sortedProducts/rating"       --}}
                    
                     </ul> --}}
                      {{!-- <form action="/filter" method="POST"> --}}
-                <form method="post" action="/products/filter" id="brandFilter">
+               
                      
 
 {{!-- <select class="form-select" aria-label="Default select example" name="drop">
@@ -298,7 +299,7 @@ href="/sortedProducts/rating"       --}}
                 </form> --}}
 
                 <div class="m-3">
-                    <input type="submit" value="filter" class=" btn btn-success col-12 ">
+                   
                 </div>
                 <input class="form-check-input ms-2" type="checkbox" id="flexCheckChecked" name="brandName" value=""
                     hidden checked>
@@ -334,7 +335,7 @@ href="/sortedProducts/rating"       --}}
              <header class="card-header">
                 <a  data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down float-right"></i>
-                    <h6 class="title">Brands</h6>
+                    <h6 class="title">Categories</h6>
                 </a>
             </header> 
             <div class="filter-content collapse show" id="collapse_4" style="">
@@ -369,7 +370,7 @@ href="/sortedProducts/rating"       --}}
                 </div> <!-- card-body.// -->
             </div> 
         </article> <!-- filter-group  .// -->
-        <article class="filter-group">
+        {{!-- <article class="filter-group">
             <header class="card-header">
                 <a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down float-right"></i>
@@ -441,7 +442,7 @@ href="/sortedProducts/rating"       --}}
                     <button class="btn btn-block btn-primary">Apply</button>
                 </div><!-- card-body.// -->
             </div>
-        </article> <!-- filter-group .// -->
+        </article> <!-- filter-group .// --> --}}
         
     </div> <!-- card.// -->
     
