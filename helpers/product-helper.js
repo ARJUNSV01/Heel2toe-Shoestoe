@@ -314,9 +314,9 @@ module.exports = {
     });
   },
 
-  filterProducts: (filter, catFilter, gender) => {
+  filterProducts: (brandFilter, catFilter, gender) => {
     return new Promise(async (resolve, reject) => {
-      if (catFilter.length>1 && filter.length>2) {
+      if (catFilter.length>1 && brandFilter.length>1) {
         let result = await db
           .get()
           .collection(collection.VENDOR_COLLECTION)
@@ -326,7 +326,7 @@ module.exports = {
             },
             {
               // $match: { $or: filter }
-              $match: { $and: [{ $or: filter }, { $or: catFilter }] },
+              $match: { $and: [{ $or: brandFilter }, { $or: catFilter }] },
             },
             {
               $match: { "products.gender": gender },
@@ -339,7 +339,7 @@ module.exports = {
         console.log(result);
         resolve(result);
       }
-      if (filter.length>1) {
+      if (brandFilter.length>1) {
         let result = await db
           .get()
           .collection(collection.VENDOR_COLLECTION)
@@ -348,7 +348,7 @@ module.exports = {
               $unwind: "$products",
             },
             {
-              $match: { $or: filter },
+              $match: { $or: brandFilter },
             },
             {
               $match: { "products.gender": gender },
@@ -429,11 +429,7 @@ module.exports = {
       console.log(true, pro);
       resolve(pro);
     });
-  },getSortedProducts:(sortBy)=>{
-    return new Promise(async(resolve,reject)=>{
-    let result=  await db.get().collection(collection.v)
-    })
-  }
+  },
 
 
 

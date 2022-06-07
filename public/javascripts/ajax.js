@@ -75,7 +75,16 @@ function deleteItem(cartId) {
     })
   })
 
-  // $('input[name=brandName')
+
+function sort(sortBy){
+  $.ajax({
+    url:'/sortedProducts/'+sortBy,
+    method:'get',
+    success(response){
+      $('#filteredProducts').load(location.href + " #filteredProducts");
+    }
+  })
+}
 
   
     

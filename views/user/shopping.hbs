@@ -17,10 +17,10 @@
   </a>
 
   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" href="/sortedProducts/addedOn" >What's new</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/netPricelowtohigh" >Price : low to high</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/netPricehightolow" >Price : high to low</a></li>
-    <li><a class="dropdown-item" href="/sortedProducts/rating"  >Customer Rating</a></li>
+    <li><a class="dropdown-item" onclick="sort('rating')"  >Customer Rating</a></li>
+    <li><a class="dropdown-item" onclick="sort('netPricelowtohigh')" >Price : low to high</a></li>
+    <li><a class="dropdown-item" onclick="sort('netPricehightolow')"  >Price : high to low</a></li>
+    <li><a class="dropdown-item" onclick="sort('latest')"   >What's new</a></li>
   </ul>
 </div>
 {{!-- href="/sortedProducts/addedOn"
@@ -28,7 +28,7 @@ href="/sortedProducts/netPricelowtohigh"
 href="/sortedProducts/netPricehightolow"  
 href="/sortedProducts/rating"       --}}
         <!-- ****** Quick View Modal Area Start ****** -->
-        <div class="modal fade" id="quickview" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
+        {{!-- <div class="modal fade" id="quickview" tabindex="-1" role="dialog" aria-labelledby="quickview" aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
@@ -97,7 +97,7 @@ href="/sortedProducts/rating"       --}}
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <!-- ****** Quick View Modal Area End ****** -->
 
         <section class="shop_grid_area section_padding_100">

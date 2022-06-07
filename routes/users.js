@@ -400,24 +400,45 @@ router.post("/submit-reviews/:id", verifyLogin, (req, res) => {
 //     });
 // });
 router.get('/sortedProducts/:id',(req,res)=>{
-  console.log();
+  console.log(menProducts);
+  if(req.params.id=='rating'){
+  menProducts.sort((a,b)=>{
+return b.products.avgRating-a.products.avgRating
+  })
+  console.log(menProducts);
+  res.json({status:true})
+}
+if(req.params.id=='netPricelowtohigh'){
+  menProducts.sort((a,b)=>{
+return a.products.netprice-b.products.netprice
+  })
+  console.log(menProducts);
+  res.json({status:true})
+}
+if(req.params.id=='netPricehightolow'){
+  menProducts.sort((a,b)=>{
+return b.products.netprice-a.products.netprice
+  })
+  console.log(menProducts);
+  res.json({status:true})
+}
 })
-router.get("/shopByCategory/:id", (req, res) => {
-  let gender = req.session.gender;
-  req.session.category = req.params.id;
-  let category = req.session.category;
-  productHelper.shopByCategory(req.params.id, gender).then((menProducts) => {
-    res.render("user/shopping", { user: true, menProducts });
-  });
-});
-router.get("/shopByBrands/:id", (req, res) => {
-  req.session.brand = req.params.id;
-  let gender = req.session.gender;
-  let category = req.session.category;
-  productHelper
-    .shopByBrands(req.params.id, category, gender)
-    .then((menProducts) => {
-      res.render("user/shopping", { user: true, menProducts });
-    });
-});
+// router.get("/shopByCategory/:id", (req, res) => {
+//   let gender = req.session.gender;
+//   req.session.category = req.params.id;
+//   let category = req.session.category;
+//   productHelper.shopByCategory(req.params.id, gender).then((menProducts) => {
+//     res.render("user/shopping", { user: true, menProducts });
+//   });
+// });
+// router.get("/shopByBrands/:id", (req, res) => {
+//   req.session.brand = req.params.id;
+//   let gender = req.session.gender;
+//   let category = req.session.category;
+//   productHelper
+//     .shopByBrands(req.params.id, category, gender)
+//     .then((menProducts) => {
+//       res.render("user/shopping", { user: true, menProducts });
+//     });
+// });
 module.exports = router;
