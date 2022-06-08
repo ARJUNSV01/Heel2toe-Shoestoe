@@ -21,7 +21,8 @@
     "node-sass": "^7.0.1",
     "nodemon": "^2.0.16",
     "razorpay": "^2.8.1",
-    "sass": "^1.51.0"
+    "sass": "^1.51.0",
+    "twilio": "^3.77.2"
   },
   "devDependencies": {
     "eslint": "^8.16.0",

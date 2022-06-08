@@ -36,11 +36,12 @@
               <tr><td>{{orders.deliveryDetails.pincode}}</td></tr>
               <tr><td>{{userData.phonenumber}}</td></tr>
               <tr><td><p class="text-light" >asds</p></td></tr>
-              {{#if orderCancelled}}
+              
+              {{!-- {{#if orderCancelled}}
              <tr><td><b class="text-danger fs-5">Order Cancelled !!!</b></td></tr> 
               {{else}}
               <tr><td><a class="btn btn-outline-dark" onclick="cancelOrder('{{orders.orderId}}')"><b class="text-danger fs-5 mt-5">Cancel Order</b></a></td></tr>
-              {{/if}}
+              {{/if}} --}}
             </table>
         </div>
     </div>
@@ -54,6 +55,7 @@
                 <th>Size</th>
                 <th>Quantity</th>
                 <th>Price</th>
+                <th></th>
                 {{#each productDetails}}
                 <tr><td><img src="/images/productsImages/{{this.productId}}(1).jpg "height=100 width=100 alt="" class="ms-2 me-2"></td>
                 <td>{{this.title}}</td>
@@ -61,8 +63,21 @@
                 <td>{{this.quantity}}</td>
                 <td>Rs. {{this.total}}</td>
                 
+                
+                {{!-- {{#if orderCancelled}} --}}
+             {{!-- <tr><td><b class="text-danger fs-5">Order Cancelled !!!</b></td></tr> 
+              {{else}} --}}
+              {{#if this.cancelled}}
+                <td><b class="text-danger fs-5">Cancelled</b></td> 
+              {{else}}
+              <td><a  id="cancel" class=" btn button-success" onclick="cancelOrder('{{this.orderId}}','{{this.cartId}}','{{this.productId}}','{{this.size}}','{{this.quantity}}')"><b class="text-danger fs-5 mt-5">Cancel Order</b></a></td>
+              {{/if}}
+              {{!-- {{/if}} --}}
+             
+                
                 </tr>
                 {{/each}}
+                
             </table>
         </div>
     

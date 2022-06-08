@@ -56,8 +56,26 @@ function deleteItem(cartId) {
   //   })
   // }
 
-    $('#brandFilter').submit((e)=>{
-    e.preventDefault()
+    // $('#brandFilter').submit((e)=>{
+    // e.preventDefault()
+    $('input[name=brandName]').change(()=>{
+    $.ajax({
+      url:'/products/filter',
+      method:'post',
+      data:$('#brandFilter').serialize(),
+      success:(status)=>{
+          
+         
+        // if(status){
+        //   console.log(status)
+            $('#filteredProducts').load(location.href + " #filteredProducts"); 
+
+        //  $('#filteredProducts').load(location.href + " #filteredProducts");
+          
+      }
+    })
+  })
+  $('input[name=category]').change(()=>{
     $.ajax({
       url:'/products/filter',
       method:'post',
@@ -85,12 +103,14 @@ function sort(sortBy){
     }
   })
 }
-function cancelOrder(orderId){
-  
+function cancelOrder(orderId,cartId,productId,size,quantity){
+  console.log(true,true,orderId,cartId,productId,size,quantity);
   $.ajax({
-    url:'/cancelOrder/'+orderId,
+    
+    url:'/cancelOrder',
     method:'get',
-    success(response){
+    data:{orderId,cartId,productId,size,quantity},
+    success(){
       window.location.reload()
     }
   })

@@ -33,7 +33,7 @@ module.exports = {
       price: productDetails.price,
       discount: productDetails.discount,
       netprice: (productDetails.price * (100 - productDetails.discount)) / 100,
-      description:productDetails.description,
+      description: productDetails.description,
       // occassion: productDetails.occassion,
       gender: productDetails.gender,
       deleted: false,
@@ -96,31 +96,35 @@ module.exports = {
   deleteProducts: (vendorId, productId) => {
     console.log(vendorId);
     return new Promise(async (resolve, reject) => {
-      let check=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-        {$unwind:'$products'},
-        {$match:{'products._id':ObjectId(productId)}},
-        {$project:{products:1,_id:0}}
-      ]).toArray()
-      check=check[0].products.deleted
-      if(check){
+      let check = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          { $unwind: "$products" },
+          { $match: { "products._id": ObjectId(productId) } },
+          { $project: { products: 1, _id: 0 } },
+        ])
+        .toArray();
+      check = check[0].products.deleted;
+      if (check) {
         const data = await db
-        .get()
-        .collection(collection.VENDOR_COLLECTION)
-        .updateOne(
-          { "products._id": ObjectId(productId) },
-          { $set: { "products.$.deleted": false } }
-        );
-      resolve();
-      }else{
-      const data = await db
-        .get()
-        .collection(collection.VENDOR_COLLECTION)
-        .updateOne(
-          { "products._id": ObjectId(productId) },
-          { $set: { "products.$.deleted": true } }
-        );
-      resolve();
-        }
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .updateOne(
+            { "products._id": ObjectId(productId) },
+            { $set: { "products.$.deleted": false } }
+          );
+        resolve();
+      } else {
+        const data = await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .updateOne(
+            { "products._id": ObjectId(productId) },
+            { $set: { "products.$.deleted": true } }
+          );
+        resolve();
+      }
     });
   },
   getProductDetails: (productId) =>
@@ -212,7 +216,7 @@ module.exports = {
               "products.$.discount": updatedInfo.discount,
               // "products.$.occassion": updatedInfo.occassion,
               "products.$.gender": updatedInfo.gender,
-              "products.$.description":updatedInfo.description,
+              "products.$.description": updatedInfo.description,
               "products.$.netprice":
                 (updatedInfo.price * (100 - updatedInfo.discount)) / 100,
               "products.$.sizesAvailable": [
@@ -335,7 +339,7 @@ module.exports = {
 
   filterProducts: (brandFilter, catFilter, gender) => {
     return new Promise(async (resolve, reject) => {
-      if (catFilter.length>1 && brandFilter.length>1) {
+      if (catFilter.length > 1 && brandFilter.length > 1) {
         let result = await db
           .get()
           .collection(collection.VENDOR_COLLECTION)
@@ -348,7 +352,12 @@ module.exports = {
               $match: { $and: [{ $or: brandFilter }, { $or: catFilter }] },
             },
             {
-              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
+              $match: {
+                $and: [
+                  { "products.gender": gender },
+                  { "products.deleted": false },
+                ],
+              },
             },
             {
               $project: { products: 1, _id: 0 },
@@ -358,7 +367,7 @@ module.exports = {
         console.log(result);
         resolve(result);
       }
-      if (brandFilter.length>1) {
+      if (brandFilter.length > 1) {
         let result = await db
           .get()
           .collection(collection.VENDOR_COLLECTION)
@@ -370,7 +379,12 @@ module.exports = {
               $match: { $or: brandFilter },
             },
             {
-              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
+              $match: {
+                $and: [
+                  { "products.gender": gender },
+                  { "products.deleted": false },
+                ],
+              },
             },
             {
               $project: { products: 1, _id: 0 },
@@ -380,7 +394,8 @@ module.exports = {
         // console.log(3984989489348934893489394394398493);
         console.log(result);
         resolve(result);
-      }if(catFilter.length>1){
+      }
+      if (catFilter.length > 1) {
         let result = await db
           .get()
           .collection(collection.VENDOR_COLLECTION)
@@ -392,7 +407,12 @@ module.exports = {
               $match: { $or: catFilter },
             },
             {
-              $match: {$and:[ {"products.gender": gender },{"products.deleted":false}]},
+              $match: {
+                $and: [
+                  { "products.gender": gender },
+                  { "products.deleted": false },
+                ],
+              },
             },
             {
               $project: { products: 1, _id: 0 },
@@ -402,27 +422,26 @@ module.exports = {
         // console.log(3984989489348934893489394394398493);
         console.log(result);
         resolve(result);
-      }else{
+      } else {
         const result = await db
-        .get()
-        .collection(collection.VENDOR_COLLECTION)
-        .aggregate([
-          { $unwind: "$products" },
-          {
-            $match: {
-              $and: [
-                { "products.gender": gender },
-                { "products.deleted": false },
-              ],
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .aggregate([
+            { $unwind: "$products" },
+            {
+              $match: {
+                $and: [
+                  { "products.gender": gender },
+                  { "products.deleted": false },
+                ],
+              },
             },
-          },
 
-          { $project: { products: 1, _id: 0 } },
-        ])
-        .toArray();
-      resolve(result);
+            { $project: { products: 1, _id: 0 } },
+          ])
+          .toArray();
+        resolve(result);
       }
-     
     });
   },
 
@@ -469,10 +488,6 @@ module.exports = {
     });
   },
 
-
-
-
-
   // getSortedProducts: (sortBy, gender, category) => {
   //   return new Promise(async (resolve, reject) => {
   //     console.log(sortBy);
@@ -480,43 +495,43 @@ module.exports = {
   //     if (category == "all") category = null;
 
   //aslmdlmalmdslamd,.,mas,dklamsdklamdkasldklaskdnksdnkjdsfkjlsnkldfnaskldnaslk
-      //   if(sort=='addedOn'){
-      //  let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-      //     {$unwind:'$products'},
-      //     {$project:{products:1,_id:0}},
-      //     {$sort:{'products.addedOn':1}}
-      //   ]).toArray()
-      //   console.log(sortedProducts);
-      //   resolve(sortedProducts)
-      // }
-      // if(sort=='netPricelowtohigh'){
-      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-      //     {$unwind:'$products'},
-      //     {$project:{products:1,_id:0}},
-      //     {$sort:{'products.netprice':1}}
-      //   ]).toArray()
-      //   console.log(sortedProducts);
-      //   resolve(sortedProducts)
-      // }
-      // if(sort=='netPricehightolow'){
-      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-      //     {$unwind:'$products'},
-      //     {$project:{products:1,_id:0}},
-      //     {$sort:{'products.netprice':-1}}
-      //   ]).toArray()
-      //   console.log(sortedProducts);
-      //   resolve(sortedProducts)
-      // }
-      // if(sort=='netPricelowtohigh'){
-      //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
-      //     {$unwind:'$products'},
-      //     {$project:{products:1,_id:0}},
-      //     {$sort:{'products.addedOn':1}}
-      //   ]).toArray()
-      //   console.log(sortedProducts);
-      //   resolve(sortedProducts)
-      // }
-      //sandklandsklnaskldnaklsdnklasndklansdklansdklnasdklasdklnklnkslankldnakldnaslkdnakjndklansdklasnkladsnlkds
+  //   if(sort=='addedOn'){
+  //  let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+  //     {$unwind:'$products'},
+  //     {$project:{products:1,_id:0}},
+  //     {$sort:{'products.addedOn':1}}
+  //   ]).toArray()
+  //   console.log(sortedProducts);
+  //   resolve(sortedProducts)
+  // }
+  // if(sort=='netPricelowtohigh'){
+  //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+  //     {$unwind:'$products'},
+  //     {$project:{products:1,_id:0}},
+  //     {$sort:{'products.netprice':1}}
+  //   ]).toArray()
+  //   console.log(sortedProducts);
+  //   resolve(sortedProducts)
+  // }
+  // if(sort=='netPricehightolow'){
+  //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+  //     {$unwind:'$products'},
+  //     {$project:{products:1,_id:0}},
+  //     {$sort:{'products.netprice':-1}}
+  //   ]).toArray()
+  //   console.log(sortedProducts);
+  //   resolve(sortedProducts)
+  // }
+  // if(sort=='netPricelowtohigh'){
+  //   let sortedProducts=await db.get().collection(collection.VENDOR_COLLECTION).aggregate([
+  //     {$unwind:'$products'},
+  //     {$project:{products:1,_id:0}},
+  //     {$sort:{'products.addedOn':1}}
+  //   ]).toArray()
+  //   console.log(sortedProducts);
+  //   resolve(sortedProducts)
+  // }
+  //sandklandsklnaskldnaklsdnklasndklansdklansdklnasdklasdklnklnkslankldnakldnaslkdnakjndklansdklasnkladsnlkds
   //     var sortedProducts;
   //     switch (sortBy) {
   //       case "addedOn":

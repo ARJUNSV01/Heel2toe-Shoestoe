@@ -17,7 +17,7 @@ module.exports = {
         reject();
       } else {
         vendorData.isActive = true;
-        vendorData.approved=false
+        vendorData.approved = false;
         delete vendorData.cpassword;
         vendorData.password = await bcrypt.hash(vendorData.password, 10);
         db.get()
@@ -57,7 +57,7 @@ module.exports = {
     });
   },
   updateProfile: (updatedInfo, vendorId) => {
-    console.log(updatedInfo,vendorId);
+    console.log(updatedInfo, vendorId);
     return new Promise(async (resolve, reject) => {
       await db
         .get()
@@ -70,13 +70,14 @@ module.exports = {
               lastname: updatedInfo.lastname,
               phonenumber: updatedInfo.phonenumber,
               email: updatedInfo.email,
-             address:updatedInfo.address
+              address: updatedInfo.address,
             },
           }
         );
       resolve();
     });
-  },getVendorDetails: (vendorId) => {
+  },
+  getVendorDetails: (vendorId) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.VENDOR_COLLECTION)

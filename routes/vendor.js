@@ -9,12 +9,11 @@ var router = express.Router();
 var vendorHelper = require("../helpers/vendor-helper");
 const { route } = require("./users");
 
-
 let verifyLogin = (req, res, next) => {
   if (req.session.vendorLogged) {
     next();
   } else {
-    res.render("vendor/please-login")
+    res.render("vendor/please-login");
   }
 };
 
@@ -96,19 +95,19 @@ router.get("/editProfile/:id", verifyLogin, (req, res) => {
   }
 });
 router.post("/updateprofile", verifyLogin, (req, res) => {
-    let vendorData = req.session.vendor;
-   console.log(req.body);
-     vendorHelper.updateProfile(req.body, vendorData._id).then(() => {
-       req.session.vendorUpdated = true;
-       res.json({ vendorUpdated: true });
-     });
-   });
+  let vendorData = req.session.vendor;
+  console.log(req.body);
+  vendorHelper.updateProfile(req.body, vendorData._id).then(() => {
+    req.session.vendorUpdated = true;
+    res.json({ vendorUpdated: true });
+  });
+});
 router.get("/home", (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
-    orderHelper.getTotalRevenue(vendorData._id).then((response)=>{
-      res.render("vendor/home", { vendorData, vendor:true,response });
-    })  
+    orderHelper.getTotalRevenue(vendorData._id).then((response) => {
+      res.render("vendor/home", { vendorData, vendor: true, response });
+    });
   } else {
     res.redirect("/vendor/login");
   }
@@ -226,25 +225,30 @@ router.get("/home/viewproducts/view/:id", (req, res) => {
     res.redirect("/vendor/login");
   }
 });
-router.get('/viewOrders',verifyLogin,(req,res)=>{
+router.get("/viewOrders", verifyLogin, (req, res) => {
   let vendorData = req.session.vendor;
-    orderHelper.viewOrders(vendorData._id).then((orders)=>{
-      console.log(true,orders);
-      res.render('vendor/view-orders',{vendor:true,vendorData,orders})
-    })
-})
-router.get("/viewOrders/orderedItems/:id", (req, res) => {
-  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
-    let vendorData=req.session.vendor
-    let productDetails = orders.productDetails;
-    res.render("vendor/ordered-items", { vendor: true, orders, productDetails,vendorData });
+  orderHelper.viewOrders(vendorData._id).then((orders) => {
+    console.log(true, orders);
+    res.render("vendor/view-orders", { vendor: true, vendorData, orders });
   });
 });
-router.get('/shipOrder/:id',(req,res)=>{
-  orderHelper.shipOrder(req.params.id).then(()=>{
-    res.redirect('/vendor/viewOrders')
-  })
-})
+router.get("/viewOrders/orderedItems/:id", (req, res) => {
+  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
+    let vendorData = req.session.vendor;
+    let productDetails = orders.productDetails;
+    res.render("vendor/ordered-items", {
+      vendor: true,
+      orders,
+      productDetails,
+      vendorData,
+    });
+  });
+});
+router.get("/shipOrder/:id", (req, res) => {
+  orderHelper.shipOrder(req.params.id).then(() => {
+    res.redirect("/vendor/viewOrders");
+  });
+});
 router.get("/logout", (req, res) => {
   req.session.vendorLogged = false;
   res.redirect("/vendor/login");
