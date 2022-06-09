@@ -132,6 +132,53 @@ $('#submitReviews').submit((e)=>{
     }
   })
 })
+$('input[name=SbrandName]').change(()=>{
+    $.ajax({
+      
+      url:'/products/search',
+      method:'post',
+      data:$('#searchAndFilter').serialize(),
+      success:(status)=>{
+          
+         
+        // if(status){
+        //   console.log(status)
+            $('#filteredProducts').load(location.href + " #filteredProducts"); 
+
+        //  $('#filteredProducts').load(location.href + " #filteredProducts");
+          
+      }
+    })
+  })
+  $('input[name=Scategory]').change(()=>{
+    $.ajax({
+      url:'/products/search',
+      method:'post',
+      data:$('#searchAndFilter').serialize(),
+      success:(status)=>{
+          
+         
+        // if(status){
+        //   console.log(status)
+            $('#filteredProducts').load(location.href + " #filteredProducts"); 
+
+        //  $('#filteredProducts').load(location.href + " #filteredProducts");
+          
+      }
+    })
+  })
+  // function sortAfterSearch(sortBy){
+  //   $.ajax({
+  //     url:'/sortedProducts/'+sortBy,
+  //     method:'get',
+  //     success(response){
+  //       $('#filteredProducts').load(location.href + " #filteredProducts");
+  //     }
+  //   })
+  // }
+
+
+
 
   
     

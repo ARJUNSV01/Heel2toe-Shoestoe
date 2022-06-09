@@ -337,8 +337,10 @@ module.exports = {
     });
   },
 
-  filterProducts: (brandFilter, catFilter, gender) => {
+  filterProducts: (brandFilter, catFilter, gender,search) => {
     return new Promise(async (resolve, reject) => {
+      console.log('ajskjakjbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb');
+      if(!search){
       if (catFilter.length > 1 && brandFilter.length > 1) {
         let result = await db
           .get()
@@ -442,6 +444,250 @@ module.exports = {
           .toArray();
         resolve(result);
       }
+      }else{
+
+        if (catFilter.length > 1 && brandFilter.length > 1) {
+          let result = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              {
+                $project: {
+                  _id: 0,
+                  products: {
+                    $filter: {
+                      input: "$products",
+                      as: "products",
+                      cond: {
+                        $or: [
+                          {
+                            $regexMatch: {
+                              input: "$$products.brand",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.title",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.category",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+              {
+                $unwind: "$products",
+              },
+              {
+                // $match: { $or: filter }
+                $match: { $and: [{ $or: brandFilter }, { $or: catFilter }] },
+              },
+              {
+                $match: 
+                    
+                    { "products.deleted": false },
+                
+                
+              },
+              {
+                $project: { products: 1, _id: 0 },
+              },
+            ])
+            .toArray();
+          console.log(result);
+          resolve(result);
+        }
+        if (brandFilter.length > 1) {
+        console.log('hialla');
+          let result = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              {
+                $project: {
+                  _id: 0,
+                  products: {
+                    $filter: {
+                      input: "$products",
+                      as: "products",
+                      cond: {
+                        $or: [
+                          {
+                            $regexMatch: {
+                              input: "$$products.brand",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.title",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.category",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+              {
+                $unwind: "$products",
+              },
+              {
+                $match: { $or: brandFilter },
+              },
+              {
+                $match: 
+                    { "products.deleted": false },
+               
+              },
+              {
+                $project: { products: 1, _id: 0 },
+              },
+            ])
+            .toArray();
+          // console.log(3984989489348934893489394394398493);
+          console.log(result);
+          resolve(result);
+        }
+        if (catFilter.length > 1) {
+          let result = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              {
+                $project: {
+                  _id: 0,
+                  products: {
+                    $filter: {
+                      input: "$products",
+                      as: "products",
+                      cond: {
+                        $or: [
+                          {
+                            $regexMatch: {
+                              input: "$$products.brand",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.title",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.category",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+              {
+                $unwind: "$products",
+              },
+              {
+                $match: { $or: catFilter },
+              },
+              {
+                $match: 
+                    { "products.deleted": false },
+                 
+              },
+              {
+                $project: { products: 1, _id: 0 },
+              },
+            ])
+            .toArray();
+          // console.log(3984989489348934893489394394398493);
+          console.log(result);
+          resolve(result);
+        } else {
+          const result = await db
+            .get()
+            .collection(collection.VENDOR_COLLECTION)
+            .aggregate([
+              {
+                $project: {
+                  _id: 0,
+                  products: {
+                    $filter: {
+                      input: "$products",
+                      as: "products",
+                      cond: {
+                        $or: [
+                          {
+                            $regexMatch: {
+                              input: "$$products.brand",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.title",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                          {
+                            $regexMatch: {
+                              input: "$$products.category",
+                              regex: search,
+                              options: "i",
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+              { $unwind: "$products" },
+              {
+                $match: 
+                 
+                   
+                    { "products.deleted": false },
+                  
+              
+              },
+  
+              { $project: { products: 1, _id: 0 } },
+            ])
+            .toArray();
+          resolve(result);
+        }
+      }
     });
   },
 
@@ -460,26 +706,30 @@ module.exports = {
         subject: reviews.subject,
         review: reviews.review,
       };
-      let check=await db.get().collection(collection.USER_COLLECTION).aggregate([
-        {$match:{_id:ObjectId(userId)}},
-        {$unwind:'$orders'},
-        {$unwind:'$orders.productDetails'},
-        {$project:{'orders.productDetails':1}},
-        {$match:{'orders.productDetails.productId':reviews.productId}}
-      ]).toArray()
-      console.log(true,true,true,check);
-      if(check.length!=0){
-      let response = await db
+      let check = await db
         .get()
-        .collection(collection.VENDOR_COLLECTION)
-        .updateOne(
-          { "products._id": ObjectId(reviews.productId) },
-          { $push: { "products.$.reviews": customerReviews } }
-        );
-      resolve();
-        }else{
-          reject()
-        }
+        .collection(collection.USER_COLLECTION)
+        .aggregate([
+          { $match: { _id: ObjectId(userId) } },
+          { $unwind: "$orders" },
+          { $unwind: "$orders.productDetails" },
+          { $project: { "orders.productDetails": 1 } },
+          { $match: { "orders.productDetails.productId": reviews.productId } },
+        ])
+        .toArray();
+      console.log(true, true, true, check);
+      if (check.length != 0) {
+        let response = await db
+          .get()
+          .collection(collection.VENDOR_COLLECTION)
+          .updateOne(
+            { "products._id": ObjectId(reviews.productId) },
+            { $push: { "products.$.reviews": customerReviews } }
+          );
+        resolve();
+      } else {
+        reject();
+      }
     });
   },
   getLatestProducts: () => {
@@ -497,6 +747,54 @@ module.exports = {
         .toArray();
       console.log(true, pro);
       resolve(pro);
+    });
+  },
+  search: (text) => {
+    return new Promise(async (resolve, reject) => {
+      let result = await db
+        .get()
+        .collection(collection.VENDOR_COLLECTION)
+        .aggregate([
+          {
+            $project: {
+              _id: 0,
+              products: {
+                $filter: {
+                  input: "$products",
+                  as: "products",
+                  cond: {
+                    $or: [
+                      {
+                        $regexMatch: {
+                          input: "$$products.brand",
+                          regex: text,
+                          options: "i",
+                        },
+                      },
+                      {
+                        $regexMatch: {
+                          input: "$$products.title",
+                          regex: text,
+                          options: "i",
+                        },
+                      },
+                      {
+                        $regexMatch: {
+                          input: "$$products.category",
+                          regex: text,
+                          options: "i",
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+          {$unwind:'$products'}
+        ]).toArray()
+        console.log(result);
+        resolve(result)
     });
   },
 

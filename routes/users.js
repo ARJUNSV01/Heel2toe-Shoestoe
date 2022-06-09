@@ -10,6 +10,8 @@ var db = require("../config/connection");
 var collection = require("../config/collections");
 const session = require("express-session");
 var menProducts;
+var searchKeyword;
+var searchResult;
 let verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -467,4 +469,48 @@ router.get("/sortedProducts/:id", (req, res) => {
 //       res.render("user/shopping", { user: true, menProducts });
 //     });
 // });
+router.post('/products/search',(req,res)=>{
+console.log(req.body);
+if(req.body.search){
+  searchKeyword=req.body.search
+ productHelper.search(searchKeyword).then((result)=>{
+   searchResult=result
+   console.log('searchResult:'+searchResult);
+   res.redirect('/search')
+ })
+}else{
+  console.log(req.body);
+  
+  let a = req.body;
+  
+  let brandFilter = [];
+  for (let i of a.SbrandName) {
+    brandFilter.push({ "products.brand": i });
+  }
+  
+  let catFilter = [];
+  for (let i of a.Scategory) {
+    catFilter.push({ "products.category": i });
+  }
+  console.log('holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  
+  let gender = req.session.gender;
+  
+  
+  productHelper.filterProducts(brandFilter, catFilter, gender,searchKeyword).then((response) => {
+
+    searchResult = response;
+    console.log(searchResult);
+    res.json({ status: true });
+  });
+}
+})
+router.get('/search',(req,res)=>{
+  productHelper.getBrands().then((brands)=>{
+    let categories = productHelper.getCategories().then((categories) =>{
+    let userData=req.session.user
+    res.render('user/shopping2',{user:true,userData,searchResult,brands,categories})
+  })
+})
+})
 module.exports = router;
