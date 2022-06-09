@@ -474,7 +474,9 @@
 </section>
 <br>
 <br>
-<section class="container">
+{{#if reviews}}
+<section class="rateProducts container" >
+    
     <p class="fs-3 text-center  mb-3">Customer Reviews</p>
     {{#each reviews}}
     <div class="card border p-3">
@@ -499,12 +501,15 @@
     </div>
     {{/each}}
 </section>
-<section class="container mb-5">
+{{/if}}
+{{#if userData}}
+<section class=" rate container mb-5 ">
     <p class="fs-3 text-center mb-3">Ratings & Reviews</p>
-    <form action="/submit-reviews/{{product.products._id}}" method="post" id="submitReviews">
+    {{!-- <form action="/submit-reviews/{{product.products._id}}" method="post" id="submitReviews"> --}}
+      <form  method="post" id="submitReviews">
         <div class="stars">
 
-            <input class="star star-5" id="star-5" type="radio" value="5" name="star" />
+            <input class="star star-5" id="star-5" type="radio" required  value="5" name="star" />
             <input type="text" value="{{product.products._id}}" name="productId" hidden>
             <label class="star star-5" for="star-5"></label>
             <input class="star star-4" id="star-4" type="radio" value="4" name="star" />
@@ -525,9 +530,14 @@
         Review:
         <textarea name="review" class="form-control" rows="5" required></textarea>
         <br>
+        {{!-- <input type="submit" value="submit" class="btn btn-success"> --}}
         <input type="submit" value="submit" class="btn btn-success">
+        {{#if cantRate}}
+        <p class="mt-4 fw-bolder text-info">You must Buy this product to Rate ! ! !</p>
+        {{/if}}
     </form>
 </section>
+{{/if}}
 
 <!-- <<<<<<<<<<<<<<<<<<<< Single Product Details Area End >>>>>>>>>>>>>>>>>>>>>>>>> -->
 
@@ -756,4 +766,7 @@
         //$("input[type='submit']").removeAttr("disabled");
     });
 });
+
+
+
 </script>

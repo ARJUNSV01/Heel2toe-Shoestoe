@@ -460,6 +460,15 @@ module.exports = {
         subject: reviews.subject,
         review: reviews.review,
       };
+      let check=await db.get().collection(collection.USER_COLLECTION).aggregate([
+        {$match:{_id:ObjectId(userId)}},
+        {$unwind:'$orders'},
+        {$unwind:'$orders.productDetails'},
+        {$project:{'orders.productDetails':1}},
+        {$match:{'orders.productDetails.productId':reviews.productId}}
+      ]).toArray()
+      console.log(true,true,true,check);
+      if(check.length!=0){
       let response = await db
         .get()
         .collection(collection.VENDOR_COLLECTION)
@@ -468,6 +477,9 @@ module.exports = {
           { $push: { "products.$.reviews": customerReviews } }
         );
       resolve();
+        }else{
+          reject()
+        }
     });
   },
   getLatestProducts: () => {

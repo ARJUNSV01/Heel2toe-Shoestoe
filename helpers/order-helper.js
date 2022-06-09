@@ -241,7 +241,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.six": { $lte: 0 } },
-              { $set: { "products.$.quantity.six": null } }
+              { $set: { "products.$.quantity.six": 0 } }
             );
         }
         if (Size == "seven") {
@@ -257,7 +257,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.seven": { $lte: 0 } },
-              { $set: { "products.$.quantity.seven": null } }
+              { $set: { "products.$.quantity.seven": 0 } }
             );
         }
         if (Size == "eight") {
@@ -273,7 +273,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.eight": { $lte: 0 } },
-              { $set: { "products.$.quantity.eight": null } }
+              { $set: { "products.$.quantity.eight": 0 } }
             );
         }
         if (Size == "nine") {
@@ -289,7 +289,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.nine": { $lte: 0 } },
-              { $set: { "products.$.quantity.nine": null } }
+              { $set: { "products.$.quantity.nine": 0 } }
             );
         }
         if (Size == "ten") {
@@ -305,7 +305,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.ten": { $lte: 0 } },
-              { $set: { "products.$.quantity.ten": null } }
+              { $set: { "products.$.quantity.ten": 0 } }
             );
         }
         if (Size == "eleven") {
@@ -321,7 +321,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.eleven": { $lte: 0 } },
-              { $set: { "products.$.quantity.eleven": null } }
+              { $set: { "products.$.quantity.eleven": 0 } }
             );
         }
         if (Size == "3-4") {
@@ -337,7 +337,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.threetofour": { $lte: 0 } },
-              { $set: { "products.$.quantity.threetofour": null } }
+              { $set: { "products.$.quantity.threetofour": 0 } }
             );
         }
         if (Size == "4-5") {
@@ -353,7 +353,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.fourtofive": { $lte: 0 } },
-              { $set: { "products.$.quantity.fourtofive": null } }
+              { $set: { "products.$.quantity.fourtofive": 0 } }
             );
         }
         if (Size == "5-6") {
@@ -369,7 +369,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.fivetosix": { $lte: 0 } },
-              { $set: { "products.$.quantity.fivetosix": null } }
+              { $set: { "products.$.quantity.fivetosix": 0 } }
             );
         }
         if (Size == "6-7") {
@@ -385,7 +385,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.sixtoseven": { $lte: 0 } },
-              { $set: { "products.$.quantity.sixtoseven": null } }
+              { $set: { "products.$.quantity.sixtoseven": 0 } }
             );
         }
         if (Size == "7-8") {
@@ -401,7 +401,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.seventoeight": { $lte: 0 } },
-              { $set: { "products.$.quantity.seventoeight": null } }
+              { $set: { "products.$.quantity.seventoeight": 0 } }
             );
         }
         if (Size == "8-9") {
@@ -417,7 +417,7 @@ module.exports = {
             .collection(collection.VENDOR_COLLECTION)
             .updateOne(
               { "products.quantity.eighttonine": { $lte: 0 } },
-              { $set: { "products.$.quantity.eighttonine": null } }
+              { $set: { "products.$.quantity.eighttonine": 0 } }
             );
         }
       }
@@ -487,11 +487,11 @@ module.exports = {
   },
   cancelOrder: (orderId,cartId) => {
     return new Promise(async (resolve, reject) => {
-      // let response = await db
-      //   .get()
-      //   .collection(collection.USER_COLLECTION)
-      //   .updateOne({'orders.orderId':ObjectId(orderId),'orders.productDetails.cartId':ObjectId(cartId)},
-      //   {$set:{'orders.$.productDetails.$[i].cancelled':true}},{arrayFilters:[{'i.cartId':ObjectId(cartId)}]})
+      let response = await db
+        .get()
+        .collection(collection.USER_COLLECTION)
+        .updateOne({'orders.orderId':ObjectId(orderId),'orders.productDetails.cartId':ObjectId(cartId)},
+        {$set:{'orders.$.productDetails.$[i].cancelled':true}},{arrayFilters:[{'i.cartId':ObjectId(cartId)}]})
       resolve();
     });
   },
@@ -522,10 +522,73 @@ module.exports = {
     });
   },changeQtyAfterCancel:(productId,size,quantity)=>{
     return new Promise (async(resolve,reject)=>{
-    let updResponse=  await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId),'products.sizesAvailable.size':size},
-      {$inc:{'products.$[i].sizesAvailable.$[j].qty':Number(quantity)}},{arrayFilters:[{'i._id':ObjectId(productId)},{'j.size':size}]})
-      console.log('holaa',updResponse);
-      resolve()
+  switch (size) {
+    case "six":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.six':Number(quantity)}})
+      
+      break;
+      case "seven":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seven':Number(quantity)}})
+      
+      break;
+      case "eight":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seven':Number(quantity)}})
+      
+      break;
+      case "nine":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seven':Number(quantity)}})
+      
+      break;
+      case "ten":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seven':Number(quantity)}})
+      
+      break;
+      case "eleven":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seven':Number(quantity)}})
+      
+      break;
+      case "threetofour":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.threetofour':Number(quantity)}})
+      
+      break;
+      case "fourtofive":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.fourtofive':Number(quantity)}})
+      
+      break;
+      case "fivetosix":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.fivetosix':Number(quantity)}})
+      
+      break;
+      case "sixtoseven":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.sixtoseven':Number(quantity)}})
+      
+      break;
+      case "seventoeight":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.seventoeight':Number(quantity)}})
+      
+      break;
+      case "eighttonine":
+    await db.get().collection(collection.VENDOR_COLLECTION).updateOne({'products._id':ObjectId(productId)},
+    {$inc:{'products.$.quantity.eighttonine':Number(quantity)}})
+      
+      break;
+      
+      
+  
+    default:
+      break;
+  }
     })
     
   }

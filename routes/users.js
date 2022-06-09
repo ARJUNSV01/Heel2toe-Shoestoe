@@ -158,7 +158,9 @@ router.get("/shopping/view/:id", async (req, res) => {
         adult,
         avgRating,
         reviews,
+        cantRate:req.session.cantRate
       });
+      req.session.cantRate=false
     });
   } catch (err) {
     console.log(err);
@@ -407,11 +409,14 @@ console.log(false,req.query);
     res.json({ status: true });
   });
 });
-router.post("/submit-reviews/:id", verifyLogin, (req, res) => {
+router.post("/submit-reviews", (req, res) => {
   productHelper.submitReviews(req.body, req.session.user._id).then(() => {
-    // res.json({ status: true });
-    res.redirect("/shopping/view/" + req.params.id);
-  });
+    res.json({ status: true });
+    // res.redirect("/shopping/view/" + req.params.id);
+  }).catch(()=>{
+    req.session.cantRate=true
+    res.json({status:false})
+  })
 });
 // router.get("/sortedProducts/:id", (req, res) => {
 //   let gender = req.session.gender;

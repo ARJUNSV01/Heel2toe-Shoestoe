@@ -115,6 +115,23 @@ function cancelOrder(orderId,cartId,productId,size,quantity){
     }
   })
 }
+$('#submitReviews').submit((e)=>{
+  e.preventDefault()
+  $.ajax({
+    url:'/submit-reviews',
+    method:'post',
+    data:$('#submitReviews').serialize(),
+    success:(status)=>{
+      if(status){
+        // $('.rateProducts').load(location.href + " .rateProducts");
+        // $('.rate').load(location.href + " .rate");
+        window.location.reload()
+      
+    }
+
+    }
+  })
+})
 
   
     
