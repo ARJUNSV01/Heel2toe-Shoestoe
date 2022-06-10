@@ -12,17 +12,12 @@
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <form method="post"  id="searchAndFilter">
     <div class="dropdown float-end mt-3 me-4  ">
-        <a style="border:solid rgb(212, 211, 211) 1.5px;" class="text-black pt-1 pb-1 ps-5 pe-5 dropdown-toggle"
-            href="#" role="button" id="dropdownMenuLink" selected data-bs-toggle="dropdown" aria-expanded="false">
-            Sort Products
-        </a>
-
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" onclick="sortAfterSearch('rating')">Customer Rating</a></li>
-            <li><a class="dropdown-item" onclick="sortAfterSearch('netPricelowtohigh')">Price : low to high</a></li>
-            <li><a class="dropdown-item" onclick="sortAfterSearch('netPricehightolow')">Price : high to low</a></li>
-            <li><a class="dropdown-item" onclick="sortAfterSearch('latest')">What's new</a></li>
-        </ul>
+        <select class="form-select" name="sortBy" aria-label="Default select example" id="sortMenu">
+  <option selected>Sort</option>
+  <option value="rating">Customer Ratings</option>
+  <option value="netPricelowtohigh">Price : Low to High</option>
+  <option value="netPricehightolow">Price : High to Low</option>
+</select>
     </div>
     {{!-- href="/sortedProducts/addedOn"
     href="/sortedProducts/netPricelowtohigh"
@@ -276,7 +271,7 @@
                                 <header class="card-header">
                                     <a data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
                                         <i class="icon-control fa fa-chevron-down float-right"></i>
-                                        <h6 class="title">Brand</h6>
+                                        <h6 class="title">Brands</h6>
                                     </a>
                                 </header>
                                 <div class="filter-content collapse show" id="collapse_1" style="">

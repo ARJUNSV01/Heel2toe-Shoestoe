@@ -94,15 +94,34 @@ function deleteItem(cartId) {
   })
 
 
-function sort(sortBy){
+// function sort(sortBy){
+//   $.ajax({
+//     url:'/sortedProducts/'+sortBy,
+//     method:'get',
+//     success(response){
+//       $('#filteredProducts').load(location.href + " #filteredProducts");
+//     }
+//   })
+// }
+
+$('#sortMenu').on('change',()=>{
   $.ajax({
-    url:'/sortedProducts/'+sortBy,
-    method:'get',
-    success(response){
-      $('#filteredProducts').load(location.href + " #filteredProducts");
+    url:'/products/filter',
+    method:'post',
+    data:$('#brandFilter').serialize(),
+    success:(status)=>{
+        
+       
+      // if(status){
+      //   console.log(status)
+          $('#filteredProducts').load(location.href + " #filteredProducts"); 
+
+      //  $('#filteredProducts').load(location.href + " #filteredProducts");
+        
     }
   })
-}
+})
+
 function cancelOrder(orderId,cartId,productId,size,quantity){
   console.log(true,true,orderId,cartId,productId,size,quantity);
   $.ajax({
@@ -169,14 +188,31 @@ $('input[name=SbrandName]').change(()=>{
   })
   // function sortAfterSearch(sortBy){
   //   $.ajax({
-  //     url:'/sortedProducts/'+sortBy,
-  //     method:'get',
+  //     url:'/products/search',
+  //     method:'post',
+  //     data:{sortBy},
   //     success(response){
   //       $('#filteredProducts').load(location.href + " #filteredProducts");
   //     }
   //   })
   // }
+  $('#sortMenu').on('change',()=>{
+    $.ajax({
+      url:'/products/search',
+      method:'post',
+      data:$('#searchAndFilter').serialize(),
+      success:(status)=>{
+          
+         
+        // if(status){
+        //   console.log(status)
+            $('#filteredProducts').load(location.href + " #filteredProducts"); 
 
+        //  $('#filteredProducts').load(location.href + " #filteredProducts");
+          
+      }
+    })
+  })
 
 
 

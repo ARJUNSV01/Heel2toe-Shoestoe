@@ -10,18 +10,14 @@
     <!-- Responsive CSS -->
     <link href="/stylesheets/css/responsive.css" rel="stylesheet"> --}}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+ <form method="post" action="/products/filter" id="brandFilter">
     <div class="dropdown float-end mt-3 me-4  ">
-  <a style="border:solid rgb(212, 211, 211) 1.5px;"class="text-black pt-1 pb-1 ps-5 pe-5 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" selected data-bs-toggle="dropdown" aria-expanded="false">
-    Sort Products
-  </a>
-
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-    <li><a class="dropdown-item" onclick="sort('rating')"  >Customer Rating</a></li>
-    <li><a class="dropdown-item" onclick="sort('netPricelowtohigh')" >Price : low to high</a></li>
-    <li><a class="dropdown-item" onclick="sort('netPricehightolow')"  >Price : high to low</a></li>
-    <li><a class="dropdown-item" onclick="sort('latest')"   >What's new</a></li>
-  </ul>
+   <select class="form-select" name="sortBy" aria-label="Default select example" id="sortMenu">
+  <option selected>Sort</option>
+  <option value="rating">Customer Ratings</option>
+  <option value="netPricelowtohigh">Price : Low to High</option>
+  <option value="netPricehightolow">Price : High to Low</option>
+</select>
 </div>
 {{!-- href="/sortedProducts/addedOn"
 href="/sortedProducts/netPricelowtohigh"
@@ -252,7 +248,7 @@ href="/sortedProducts/rating"       --}}
                             </div>
                         </div> --}}
                         {{!-- col-12 --}}
-                         <form method="post" action="/products/filter" id="brandFilter">
+                        
                     <div style=" " class="col-10 ms-5 ">
                        {{!-- <input style="background-color: rgba(255, 7, 152, 0.993);" type="submit" value="Filter" class=" text-white fw-bolder mb-4 btn  col-12 "> --}}
             
@@ -261,7 +257,7 @@ href="/sortedProducts/rating"       --}}
             <header class="card-header">
                 <a  data-toggle="collapse" data-target="#collapse_1" aria-expanded="true" class="">
                     <i class="icon-control fa fa-chevron-down float-right"></i>
-                    <h6 class="title">Brand</h6>
+                    <h6 class="title">Brands</h6>
                 </a>
             </header>
             <div class="filter-content collapse show" id="collapse_1" style="">
