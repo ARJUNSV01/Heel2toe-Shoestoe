@@ -123,6 +123,7 @@ $('#sortMenu').on('change',()=>{
 })
 
 function cancelOrder(orderId,cartId,productId,size,quantity){
+  alert('ki')
   // console.log(true,true,orderId,cartId,productId,size,quantity);
   $.ajax({
     

@@ -19,16 +19,20 @@
                             <div class="table-responsive">
                                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
-                                        <tr>
+                                        <tr><th>Order details</th>
+                                            <th>Product Image</th>
+                                          
                                             <th>Delivery Address</th>
-                                            <th>Ordered on</th>
+                                          
                                             <th>Price</th>
-                                            
+                                            <th>Quantity</th>
+                                           <th>Total</th>
                                            <th>Payment status</th>
                                            <th>Order Status</th>
-                                            <th>View</th>
+                                           <th>Delivery Status</th>
+                                            
                                            
-                                            <th>Delete</th>
+                                            {{!-- <th>Delete</th> --}}
                                         </tr>
                                     </thead>
                                     {{!-- <tfoot>
@@ -46,28 +50,52 @@
                                     <tbody>
             {{#each orders}}
             
-            <tr>
-                <td><p class="m-0 fw-bolder"> UserId:{{this._id}}</p>
+            <tr><td><p><span class="fw-bolder"> OrderId:</span>{{this.orders.productDetails.cartId}}</p>
+            <span>{{this.orders.productDetails.brand}}</span>
+            <p>{{this.orders.productDetails.title}}</p>
+            <p><span class="fw-bolder"> OrderOn:</span>{{this.orders.time}}</p>
+            </td>
+                <td><img src="/images/productsImages/{{this.orders.productDetails.productId}}(1).jpg" alt=""></td>
+                {{!-- <td><p class="fw-bolder">{{this.orders.productDetails.brand}}</p><p>{{this.orders.productDetails.title}}</p></td> --}}
+                <td>
                 <p class="m-0">{{this.firstname}}</p>
                 <p class="m-0">{{this.orders.deliveryDetails.house}},{{this.orders.deliveryDetails.city}}</p>
                 <p class="m-0">{{this.orders.deliveryDetails.state}},{{this.orders.deliveryDetails.pincode}}</p>
                 <p class="m-0">{{this.orders.deliveryDetails.mobile}}</p>
                 </td>
-                <td>{{this.orders.time}}</td>
-                <td> Rs.{{this.orders.totalAmount}} </td>
                 
+                <td> Rs.{{this.orders.productDetails.netprice}} </td>
+                <td>{{this.orders.productDetails.quantity}}</td>
+                <td>Rs.{{this.orders.productDetails.total}}</td>
                 <td>{{this.orders.status}}</td>
-                <td>{{#if this.orders.orderStatus}}
+                
+                <td>{{#if this.orders.productDetails.cancelled}}
+                <p class="text-danger">Order Cancelled</p>
+                {{else}}
+                    
+                    {{#if this.orders.productDetails.shipped}}
                    
                     <p>Shipped</p>
                     {{else}}
                     <p>Confirmed</p>
                     
-                    <a href="/vendor/shipOrder/{{this.orders.orderId}}" class="btn btn-primary">Ship</a>
+                    <a href="/vendor/shipOrder/{{this.orders.productDetails.cartId}}" class="btn btn-primary">Ship</a>
+                    {{/if}}
                     {{/if}}
                 </td>
-                <td><a href="/vendor/viewOrders/orderedItems/{{this.orders.orderId}}" class=""><p class="text-primary fw-bold">VIEW</p></a></td>
-                <td><a href="/vendor/home/viewproducts/delete/{{this.products._id}}"class="" onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')"><p class="text-danger fw-bold">DELETE</p></a></td>
+                <td>
+                    {{#if this.orders.productDetails.cancelled}}
+                <p class="text-danger">Order Cancelled</p>
+                {{else}}
+                    {{#if this.orders.productDetails.delivered}}
+                    <p>Delivered</p>
+                    {{else}}
+                    <a href="/vendor/deliverOrder/{{this.orders.productDetails.cartId}}" class="btn btn-success">Deliver</a>
+                    {{/if}}
+                    {{/if}}
+                </td>
+                {{!-- <td><a href="/vendor/viewOrders/orderedItems/{{this.orders.orderId}}" class=""><p class="text-primary fw-bold">VIEW</p></a></td> --}}
+                {{!-- <td><a href="/vendor/home/viewproducts/delete/{{this.products._id}}"class="" onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')"><p class="text-danger fw-bold">DELETE</p></a></td> --}}
                
             </tr>
             

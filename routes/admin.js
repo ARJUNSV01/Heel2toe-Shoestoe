@@ -40,11 +40,13 @@ router.post("/adminlog", (req, res) => {
   });
 });
 
-router.get("/home",adminlogged, (req, res) => {
+router.get("/home",adminlogged, async(req, res) => {
     let admintrue = req.session.admin;
     console.log(admintrue);
+    let count=await adminHelper.requestsCount()
+    
     adminHelper.totalRevenue().then((totalOrderDetails)=>{
-      res.render("admin/adminhome", { admintrue, admin: true ,totalOrderDetails});
+      res.render("admin/adminhome", { admintrue, admin: true ,totalOrderDetails,count});
     })
    
   

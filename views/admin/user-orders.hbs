@@ -14,60 +14,146 @@
 
         <div class="card-body">
           <table id="datatablesSimple">
-            <thead class="bg-light">
-              <tr>
-                <th>Sr.no</th>
-                <th>OrderId</th>
-                <th>Mobile</th>
-                <th>Address</th>
-                <th>Ordered On</th>
-                <th>Amount</th>
-                <th>Actions</th>
+            <thead>
+            <tr>
+              <th>Sr.no</th>
+              <th></th>
+              <th>Order details</th>
+              <th>Price</th>
 
-              </tr>
-            </thead>
-            <tbody>
-              {{#each orders}}
-              <tr>
-                <td>
-                  <p class="py-5">{{@index}}</p>
-                </td>
-                <td>
-                  <div class="d-flex align-items-center py-5">
-                    {{!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
-                      style="width: 45px; height: 45px" class="rounded-circle" /> --}}
-                    <div class="">
-                      <p class="fw-bold mb-1">{{this.orderId}}</p>
-                      {{!-- <p class="text-muted mb-0">john.doe@gmail.com</p> --}}
-                    </div>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Order status</th>
+              <th>Delivery status</th>
+              <th></th>
+
+            </tr>
+          </thead>
+          {{!-- <tfoot>
+            <tr>
+              <th>ProductId</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Brand</th>
+              <th>Image</th>
+              <th>View</th>
+              <th>Edit</th>
+              <th>Disable/Enable</th>
+            </tr>
+          </tfoot> --}}
+          <tbody>
+            {{#each orders}}
+            <tr>
+              <td>
+                <p class="py-5">{{@index}}</p>
+              </td>
+
+
+              <td><a href="/shopping/view/{{this.orders.productDetails.productId}}"><img src="/images/productsImages/{{this.orders.productDetails.productId}}(1).jpg" width="100em"
+                  alt=""></a></td>
+              <td>
+                <p><span class="fw-bolder"> OrderId:</span>{{this.orders.productDetails.cartId}}</p>
+                <span>{{this.orders.productDetails.brand}}</span>
+                <p>{{this.orders.productDetails.title}}</p>
+               <p> <span class="fw-bolder">Size:</span> {{this.orders.productDetails.size}}</p>
+                <p><span class="fw-bolder"> OrderOn:</span>{{this.orders.time}}</p>
+              </td>
+              <td>
+                <p class="py-5">Rs.{{this.orders.productDetails.netprice}}</p>
+              </td>
+              <td>
+                <p class="py-5">{{this.orders.productDetails.quantity}}</p>
+              </td>
+              <td>
+                <p class="py-5">Rs.{{this.orders.productDetails.total}}</p>
+              </td>
+              {{#if this.orders.productDetails.shipped}}
+              <td>
+                <p class="py-5">Shipped</p>
+              </td>
+              {{else}}
+              <td>
+                <p class="py-5">Confirmed</p>
+              </td>
+              {{/if}}
+              {{#if this.orders.productDetails.delivered}}
+              <td>
+                <p class="py-5">Delivered</p>
+              </td>
+              {{else}}
+              <td>
+                <p class="py-5">Yet to be delivered</p>
+              </td>
+              {{/if}}
+              {{#if this.orders.productDetails.delivered}}
+              {{else}}
+
+              {{#if this.orders.productDetails.cancelled}}
+              <td><p class="text-danger py-5 fs-5">Cancelled</p></td>
+              {{else}}
+              <td><a id="cancel" class=" py-5 btn button-success"
+                  onclick="cancelOrder('{{this.orders.productDetails.orderId}}','{{this.orders.productDetails.cartId}}','{{this.orders.productDetails.productId}}','{{this.orders.productDetails.size}}','{{this.orders.productDetails.quantity}}')"><b
+                    class="text-danger fs-5 mt-5">Cancel Order</b></a></td>
+              {{/if}}
+              {{!-- {{/if}} --}}
+              {{/if}}
+              {{!-- <td>
+                <a href="/orderedItems/{{this.orderId}}" class="btn btn-warning btn-sm btn-rounded my-5"> View </a>
+
+              </td> --}}
+            </tr>
+            {{/each}}
+            {{!-- <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="https://mdbootstrap.com/img/new/avatars/6.jpg" class="rounded-circle" alt=""
+                    style="width: 45px; height: 45px" />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Alex Ray</p>
+                    <p class="text-muted mb-0">alex.ray@gmail.com</p>
                   </div>
-                </td>
-                <td>
-                  <p class="fw-normal py-5">{{this.deliveryDetails.mobile}}</p>
-                  {{!-- <p class="text-muted mb-0">IT department</p> --}}
-                </td>
-                {{!-- <td>
-                  <span class="badge badge-success rounded-pill d-inline ">Active</span>
-                </td> --}}
-                <td>
-                  <p class="py-5">
-                    {{this.deliveryDetails.house}},{{this.deliveryDetails.city}},{{this.deliveryDetails.state}}</p>
-                </td>
-                <td>
-                  <p class="py-5">{{this.time}}</p>
-                </td>
-                <td>
-                  <p class="py-5">Rs.{{this.totalAmount}}</p>
-                </td>
-                <td>
-                  <a href="/admin/orderDetails/{{this.orderId}}" class="btn btn-warning btn-sm btn-rounded my-5"> View
-                  </a>
-
-                </td>
-              </tr>
-              {{/each}}
-
-            </tbody>
+                </div>
+              </td>
+              <td>
+                <p class="fw-normal mb-1">Consultant</p>
+                <p class="text-muted mb-0">Finance</p>
+              </td>
+              <td>
+                <span class="badge badge-primary rounded-pill d-inline">Onboarding</span>
+              </td>
+              <td>Junior</td>
+              <td>
+                <button type="button" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark">
+                  Edit
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <img src="https://mdbootstrap.com/img/new/avatars/7.jpg" class="rounded-circle" alt=""
+                    style="width: 45px; height: 45px" />
+                  <div class="ms-3">
+                    <p class="fw-bold mb-1">Kate Hunington</p>
+                    <p class="text-muted mb-0">kate.hunington@gmail.com</p>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p class="fw-normal mb-1">Designer</p>
+                <p class="text-muted mb-0">UI/UX</p>
+              </td>
+              <td>
+                <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
+              </td>
+              <td>Senior</td>
+              <td>
+                <button type="button" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark">
+                  Edit
+                </button>
+              </td>
+            </tr> --}}
+          </tbody>
 
           </table>
         </div>

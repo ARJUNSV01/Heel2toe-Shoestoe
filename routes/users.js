@@ -223,6 +223,7 @@ router.post("/shopping/viewProduct/:id", verifyLogin, (req, res) => {
         cartId: new ObjectId(),
         productId: productid,
         vendorId: singleproduct._id,
+        brand:singleproduct.products.brand,
         title: singleproduct.products.title,
         price: singleproduct.products.price * 1,
         discount: singleproduct.products.discount * 1,

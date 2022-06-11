@@ -67,13 +67,16 @@
                 {{!-- {{#if orderCancelled}} --}}
              {{!-- <tr><td><b class="text-danger fs-5">Order Cancelled !!!</b></td></tr> 
               {{else}} --}}
+              {{#if this.delivered}}
+              {{else}}
+
               {{#if this.cancelled}}
                 <td><b class="text-danger fs-5">Cancelled</b></td> 
               {{else}}
               <td><a  id="cancel" class=" btn button-success" onclick="cancelOrder('{{this.orderId}}','{{this.cartId}}','{{this.productId}}','{{this.size}}','{{this.quantity}}')"><b class="text-danger fs-5 mt-5">Cancel Order</b></a></td>
               {{/if}}
               {{!-- {{/if}} --}}
-             
+             {{/if}}
                 
                 </tr>
                 {{/each}}

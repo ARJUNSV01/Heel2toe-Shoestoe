@@ -170,5 +170,15 @@ $set:{redeemRequested:false}})
   {$set:{'redeemRequests.$.paymentStatus':true}},{upsert:true})
   resolve()
  })
+  },requestsCount:()=>{
+    return new Promise(async(resolve,reject)=>{
+      let requests=await db.get().collection(collection.ADMIN_COLLECTION).aggregate([
+        {$match:{'redeemRequests.paymentStatus':false}},
+        {$unwind:'$redeemRequests'},
+        {$project:{redeemRequests:1,_id:0}}
+      ]).toArray()
+     let count=requests.length
+      resolve(count)
+    })
   }
 };

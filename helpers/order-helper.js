@@ -429,12 +429,17 @@ module.exports = {
   },
   getOrderDetails: (userId) => {
     return new Promise(async (resolve, reject) => {
-      let user = await db
-        .get()
-        .collection(collection.USER_COLLECTION)
-        .findOne({ _id: ObjectId(userId) });
-      let orders = user.orders;
-      resolve(orders);
+     let orders=await db.get().collection(collection.USER_COLLECTION).aggregate([
+       {$match:{_id:ObjectId(userId)}},
+       {$unwind:'$orders'},
+       {$match:{'orders.status':'placed'}},
+       {$unwind:'$orders.productDetails'},
+       {$sort:{'orders.time':-1}}
+       
+     ]).toArray()
+     console.log(orders);
+     resolve(orders)
+      // resolve(orders);
       // let user = await db.get().collection(collection.USER_COLLECTION).aggregate([
       //   {$match:{_id:ObjectId(userId)}},
       //   {$project:{orders:1,_id:0}},
@@ -462,38 +467,42 @@ module.exports = {
   viewOrders: (vendorId) => {
     return new Promise(async (resolve, reject) => {
       console.log(vendorId);
-      let x = await db
+      let result = await db
         .get()
         .collection(collection.USER_COLLECTION)
         .aggregate([
           { $unwind: "$orders" },
-          { $match: { "orders.productDetails.vendorId": ObjectId(vendorId) } },
-          { $sort: { "orders.time": -1 } },
-        ])
-        .toArray();
-      console.log(x);
-      resolve(x);
+          {$unwind:"$orders.productDetails"},
+          { $match:{$and:[ { "orders.productDetails.vendorId": ObjectId(vendorId) },{"orders.status":'placed'}]} },
+          // {$project:{orders:"$orders.productDetails",_id:0}}
+        ]).toArray();
+        
+      console.log(result);
+      resolve(result)
     });
   },
   shipOrder: (orderId) => {
     return new Promise(async (resolve, reject) => {
-      let result = await db
-        .get()
-        .collection(collection.USER_COLLECTION)
-        .findOneAndUpdate(
-          { "orders.orderId": ObjectId(orderId) },
-          { $set: { "orders.$.orderStatus": "Shipped" } }
-        );
-      console.log(result);
+      await db.get().collection(collection.USER_COLLECTION).updateOne({'orders.productDetails.cartId':ObjectId(orderId)},
+      {$set:{'orders.$.productDetails.$[i].shipped':true}},
+      {arrayFilters:[{'i.cartId':ObjectId(orderId)}]})
       resolve();
     });
+  },
+  deliverOrder:(orderId)=>{
+return new Promise(async(resolve,reject)=>{
+  await db.get().collection(collection.USER_COLLECTION).updateOne({'orders.productDetails.cartId':ObjectId(orderId)},
+  {$set:{'orders.$.productDetails.$[i].delivered':true}},
+  {arrayFilters:[{'i.cartId':ObjectId(orderId)}]})
+  resolve();
+})
   },
   cancelOrder: (orderId,cartId) => {
     return new Promise(async (resolve, reject) => {
       let response = await db
         .get()
         .collection(collection.USER_COLLECTION)
-        .updateOne({'orders.orderId':ObjectId(orderId),'orders.productDetails.cartId':ObjectId(cartId)},
+        .updateOne({'orders.productDetails.cartId':ObjectId(cartId)},
         {$set:{'orders.$.productDetails.$[i].cancelled':true}},{arrayFilters:[{'i.cartId':ObjectId(cartId)}]})
       resolve();
     });

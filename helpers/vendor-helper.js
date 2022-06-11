@@ -96,7 +96,7 @@ module.exports = {
           { $unwind: "$orders" },
           { $match:{$and:[ { "orders.productDetails.vendorId": ObjectId(vendorId) },{"orders.status":'placed'}]} },
           {$unwind:"$orders.productDetails"},
-          {$match:{"orders.productDetails.cancelled":false}},
+          {$match:{$and:[{"orders.productDetails.cancelled":false},{"orders.productDetails.delivered":true}]}},
           { $project: { orders: 1, _id: 0 } },
         ])
         .toArray();

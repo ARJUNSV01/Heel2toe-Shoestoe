@@ -235,20 +235,25 @@ router.get("/viewOrders", verifyLogin, (req, res) => {
     res.render("vendor/view-orders", { vendor: true, vendorData, orders });
   });
 });
-router.get("/viewOrders/orderedItems/:id", (req, res) => {
-  orderHelper.getOrderedProducts(req.params.id).then((orders) => {
-    let vendorData = req.session.vendor;
-    let productDetails = orders.productDetails;
-    res.render("vendor/ordered-items", {
-      vendor: true,
-      orders,
-      productDetails,
-      vendorData,
-    });
-  });
-});
+// router.get("/viewOrders/orderedItems/:id", (req, res) => {
+//   orderHelper.getOrderedProducts(req.params.id).then((orders) => {
+//     let vendorData = req.session.vendor;
+//     let productDetails = orders.productDetails;
+//     res.render("vendor/ordered-items", {
+//       vendor: true,
+//       orders,
+//       productDetails,
+//       vendorData,
+//     });
+//   });
+// });
 router.get("/shipOrder/:id", (req, res) => {
   orderHelper.shipOrder(req.params.id).then(() => {
+    res.redirect("/vendor/viewOrders");
+  });
+});
+router.get("/deliverOrder/:id", (req, res) => {
+  orderHelper.deliverOrder(req.params.id).then(() => {
     res.redirect("/vendor/viewOrders");
   });
 });
