@@ -9,19 +9,21 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-body">Total Revenue</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        {{!-- <a class="small text-white stretched-link" href="#">View Details</a> --}}
+                                        {{!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> --}}
+                                        <p class="text-white">Rs. {{totalOrderDetails.revenue}}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-body">Placed Orders</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        {{!-- <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div> --}}
+                                        <p class="text-white">{{totalOrderDetails.count}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -36,10 +38,10 @@
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-body">Pending Requests <span class="float-end">asdasd</span></div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <a style="text-decoration: none;" class="small  stretched-link" href="/admin/viewRedeemRequests"><p class="text-white">View Requests</p> </a>
+                                        {{!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> --}}
                                     </div>
                                 </div>
                             </div>

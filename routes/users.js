@@ -259,17 +259,17 @@ router.get("/cart/:id", verifyLogin, (req, res) => {
   }
 });
 
-router.get("/cart/delete/:id", (req, res) => {
+router.get("/cart/delete/:id", verifyLogin,(req, res) => {
   cartHelper.deleteItem(req.params.id).then(() => {
     res.json({ deleted: true });
   });
 });
-router.get("/clearCart", (req, res) => {
+router.get("/clearCart", verifyLogin,(req, res) => {
   cartHelper.clearCart(req.session.user).then(() => {
     res.json({ deleted: true });
   });
 });
-router.get("/checkout", (req, res) => {
+router.get("/checkout",verifyLogin, (req, res) => {
   let userData = req.session.user;
 
   cartHelper.viewCart(userData._id).then((cartDetails) => {
@@ -341,11 +341,11 @@ router.post("/verify-payment", (req, res) => {
       res.json({ status: false, errMsg: "payment failed" });
     });
 });
-router.get("/orderSuccess", (req, res) => {
+router.get("/orderSuccess",verifyLogin, (req, res) => {
   res.render("user/paymentConf");
 });
 
-router.get("/orderSummary", (req, res) => {
+router.get("/orderSummary",verifyLogin, (req, res) => {
   try {
     let userData = req.session.user;
     orderHelper.getOrderedProducts(req.session.orderId).then((orderDetails) => {

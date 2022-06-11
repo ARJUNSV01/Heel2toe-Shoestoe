@@ -12,7 +12,7 @@ module.exports = {
         .get()
         .collection(collection.VENDOR_COLLECTION)
         .aggregate([
-          { $match: { email: vendorData.email } },
+          { $match: { _id: ObjectId(vendorData._id)} },
           { $unwind: "$products" },
 
           { $project: { products: 1, _id: 0 } },

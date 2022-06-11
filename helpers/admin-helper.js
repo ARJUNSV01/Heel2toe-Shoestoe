@@ -4,7 +4,7 @@ var db = require("../config/connection");
 var collection = require("../config/collections");
 const bcrypt = require("bcrypt");
 const Logger = require("nodemon/lib/utils/log");
-const { promise } = require("bcrypt/promises");
+const { promise, reject } = require("bcrypt/promises");
 const { ObjectId } = require("mongodb");
 module.exports = {
   // adminlogin:(adminData)=>{
@@ -96,6 +96,12 @@ module.exports = {
     resolve(vendors)
     })
   },
+  getVendor:(vendorId)=>{
+    return new Promise (async(resolve,reject)=>{
+      let vendor=await db.get().collection(collection.VENDOR_COLLECTION).findOne({_id:ObjectId(vendorId)})
+      resolve(vendor)
+    })
+  },
   blockVendor: (vendorId) => {
     return new Promise(async (resolve, reject) => {
       await db
@@ -122,4 +128,47 @@ module.exports = {
       resolve(response);
     });
   },
+  totalRevenue:()=>{
+    return new Promise(async(resolve,reject)=>{
+     let products = await db.get().collection(collection.USER_COLLECTION).aggregate([
+        {$unwind:'$orders'},
+        {$match:{'orders.status':'placed'}},
+        {$unwind:'$orders.productDetails'},
+        {$match:{'orders.productDetails.cancelled':false}},
+        {$project:{'orders.productDetails':1,_id:0}},
+        
+      ]).toArray()
+      let revenue=0
+      
+      for(let oneProduct of products){
+      revenue=revenue+(oneProduct.orders.productDetails.total)
+      }
+     let orders= await db.get().collection(collection.USER_COLLECTION).aggregate([
+        {$unwind:'$orders'},
+        {$match:{'orders.status':'placed'}},
+        {$project:{orders:1,_id:0}}
+      ]).toArray()
+      let count=orders.length
+      let response = {
+        revenue: revenue,
+        count:count
+      };
+      resolve(response);
+    })
+  },viewRedeemRequests:()=>{
+    return new Promise(async(resolve,reject)=>{
+      let admin=await db.get().collection(collection.ADMIN_COLLECTION).findOne({})
+      let requests=admin.redeemRequests
+      resolve(requests)
+    })
+  },payAmount:(vendorId,amount,requestId)=>{
+return new Promise(async(resolve,reject)=>{
+await db.get().collection(collection.VENDOR_COLLECTION).updateOne({_id:ObjectId(vendorId)},
+{$inc:{claimedAmount:Number(amount)},
+$set:{redeemRequested:false}})
+ await db.get().collection(collection.ADMIN_COLLECTION).updateOne({'redeemRequests.requestId':ObjectId(requestId)},
+  {$set:{'redeemRequests.$.paymentStatus':true}},{upsert:true})
+  resolve()
+ })
+  }
 };

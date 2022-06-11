@@ -102,16 +102,19 @@ router.post("/updateprofile", verifyLogin, (req, res) => {
     res.json({ vendorUpdated: true });
   });
 });
-router.get("/home", (req, res) => {
-  if (req.session.vendorLogged) {
+router.get("/home",verifyLogin, (req, res) => {
     let vendorData = req.session.vendor;
-    orderHelper.getTotalRevenue(vendorData._id).then((response) => {
+    vendorHelper.getTotalRevenue(vendorData._id).then((response) => {
       res.render("vendor/home", { vendorData, vendor: true, response });
     });
-  } else {
-    res.redirect("/vendor/login");
-  }
 });
+router.get('/redeemRequest',verifyLogin,(req,res)=>{
+const{vendorId,balance}=req.query
+let vendor=req.session.vendor.firstname
+vendorHelper.redeemRequest(vendorId,balance,vendor).then(()=>{
+  res.redirect('/vendor/home')
+})
+})
 router.get("/home/viewproducts", (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;

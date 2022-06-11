@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+
+
+
+    <!-- Custom styles for this page -->
+    <link href="/javascripts/vendortempfiles/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+
+<div id="layoutSidenav_content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid pt-5">
+
+                    <!-- Page Heading -->
+                    
+               
+
+                   
+                    <div class="card shadow mb-4">
+                        <div>
+                       <table class="ms-5 mt-5">
+                           <tr>
+                               <td><p class="fs-6 fw-bolder">Name : </p> </td>
+                               <td><p>{{vendorDetails.firstname}}</p></td>
+                           </tr>
+                           <tr>
+                               <td><p class=" fs-6 fw-bolder">Email : </p> </td>
+                               <td><p>{{vendorDetails.email}}</p></td>
+                           </tr>
+                           <tr>
+                              <td><p class=" fs-6 fw-bolder">Phone :</p> </td>
+                               <td><p>{{vendorDetails.phonenumber}}</p></td>
+                           </tr>
+                       </table>
+                       </div>
+                        <h1 class="h3 mb-2 text-center mb-5 text-gray-800">Products</h1>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Product ID</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Brand</th>
+                                            <th>Image</th>
+                                            {{!-- <th>View</th>
+                                            <th>Edit</th>
+                                            <th>Disable/Enable</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>ProductId</th>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Brand</th>
+                                            <th>Image</th>
+                                            {{!-- <th>View</th>
+                                            <th>Edit</th>
+                                            <th>Disable/Enable</th> --}}
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+            {{#each products}}
+            
+            <tr>
+                <td>{{this.products._id}}</td>
+                <td>{{this.products.title}}</td>
+                <td>{{this.products.category}} </td>
+                <td>{{this.products.brand}}</td>
+                 <td><img style="width:100px;height:100px"src="/images/productsImages/{{this.products._id}}(1).jpg"></td>
+                {{!-- <td><a href="/vendor/home/viewproducts/view/{{this.products._id}}" class=""><p class="text-primary fw-bold">VIEW</p></a></td> --}}
+                {{!-- <td><a href="/vendor/home/viewproducts/edit/{{this.products._id}}"class=""><p class="text-success fw-bold">EDIT</p></a></td> --}}
+                
+               
+               
+               {{!-- <td><a href="/vendor/home/viewproducts/delete/{{this.products._id}}"class="" onclick="return confirm('Are you sure,you want to delete {{this.firstname}}?')"> --}}
+               {{!-- {{#if this.products.deleted}}
+               <p class="text-primary fw-bold">ENABLE</p>
+               {{else}}
+               <p class="text-danger fw-bold">DISABLE</p>
+               {{/if}}
+               </a></td> --}}
+               
+            </tr>
+            
+             {{/each}}
+           
+        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            {{!-- <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer> --}}
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="layoutSidenav_content">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+ 
+    
+
+    <!-- Page level plugins -->
+    <script src="/javascripts/vendortempfiles/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/vendortempfiles/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/javascripts/vendortempfiles/js/demo/datatables-demo.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    

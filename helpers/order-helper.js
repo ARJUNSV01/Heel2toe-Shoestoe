@@ -39,7 +39,7 @@ module.exports = {
         status: status,
         totalAmount: cart.cartPriceInfo.sumtotal,
       };
-      
+     
       let orderId = OrderObj.orderId;
       let totalAmount = OrderObj.totalAmount;
       await db
@@ -76,13 +76,16 @@ module.exports = {
       for (let oneCart of cart) {
         sumtotal = oneCart.total + sumtotal;
         MRPtotal = oneCart.totalMRP + MRPtotal;
+        oneCart.cancelled=false
       }
 
       let cartPriceInfo = {
         MRPtotal: MRPtotal,
         sumtotal: sumtotal,
         discount: MRPtotal - sumtotal,
+       
       };
+      
       cart.cartPriceInfo = cartPriceInfo;
 
       resolve(cart);
@@ -494,32 +497,8 @@ module.exports = {
         {$set:{'orders.$.productDetails.$[i].cancelled':true}},{arrayFilters:[{'i.cartId':ObjectId(cartId)}]})
       resolve();
     });
-  },
-  getTotalRevenue: (vendorId) => {
-    return new Promise(async (resolve, reject) => {
-      let orders = await db
-        .get()
-        .collection(collection.USER_COLLECTION)
-        .aggregate([
-          { $unwind: "$orders" },
-          { $match: { "orders.productDetails.vendorId": ObjectId(vendorId) } },
-          { $project: { orders: 1, _id: 0 } },
-        ])
-        .toArray();
-      let revenue = 0;
-      let count = 0;
-      for (let oneOrder of orders) {
-        if (oneOrder.orders.status == "placed") {
-          count++;
-          revenue = revenue + oneOrder.orders.totalAmount;
-        }
-      }
-      let response = {
-        revenue: revenue,
-        count: count,
-      };
-      resolve(response);
-    });
+  
+  
   },changeQtyAfterCancel:(productId,size,quantity)=>{
     return new Promise (async(resolve,reject)=>{
   switch (size) {

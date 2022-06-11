@@ -5,7 +5,8 @@ const session = require("express-session");
 var router = express.Router();
 var adminHelper = require("../helpers/admin-helper");
 const orderHelper=require("../helpers/order-helper")
-
+const productHelper=require("../helpers/product-helper");
+const vendorHelper = require("../helpers/vendor-helper");
 /* GET home page. */
 let adminlogged = (req, res, next) => {
   if (req.session.loggedAdmin) {
@@ -42,9 +43,23 @@ router.post("/adminlog", (req, res) => {
 router.get("/home",adminlogged, (req, res) => {
     let admintrue = req.session.admin;
     console.log(admintrue);
-    res.render("admin/adminhome", { admintrue, admin: true });
+    adminHelper.totalRevenue().then((totalOrderDetails)=>{
+      res.render("admin/adminhome", { admintrue, admin: true ,totalOrderDetails});
+    })
+   
   
 });
+router.get('/viewRedeemRequests',adminlogged,(req,res)=>{
+  adminHelper.viewRedeemRequests().then((requests)=>{
+    res.render('admin/viewRedeemRequests',{admin:true,requests})
+  })
+})
+router.get('/payNow',(req,res)=>{
+  const{vendorId,amount,requestId}=req.query
+  adminHelper.payAmount(vendorId,amount,requestId).then(()=>{
+    res.redirect('/admin/viewRedeemRequests')
+  })
+})
 router.get("/viewusers",adminlogged, (req, res) => {
     adminHelper.getAllUsers().then((users) => {
       console.log(users);
@@ -107,6 +122,16 @@ router.get("/viewVendors",adminlogged, (req, res) => {
     res.redirect("/admin");
   }
 });
+router.get('/viewVendor/:id',(req,res)=>{
+  let vendorData={
+    _id:req.params.id
+  }
+  productHelper.viewProducts(vendorData).then((products)=>{
+    adminHelper.getVendor(req.params.id).then((vendorDetails)=>{
+    res.render('admin/viewVendor',{admin:true,products,vendorDetails})
+  })
+})
+})
 router.get("/viewVendors/vendorOrders/:id",adminlogged ,(req, res) => {
   orderHelper.viewOrders(req.params.id).then((orders)=>{
     let admintrue=req.session.admin

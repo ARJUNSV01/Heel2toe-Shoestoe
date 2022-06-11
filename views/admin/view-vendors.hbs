@@ -20,8 +20,9 @@
                                 <th>Email</th>
                                 <th>Gender</th>
                                 <th>Address</th>
+                                <th>View</th>
                                 
-                                <th>View Orders</th>
+                                <th>Orders</th>
                                 {{!-- <th>View Cart</th> --}}
                                 <th>Block Vendor</th>
                                 <th>Delete Vendor</th>
@@ -36,6 +37,7 @@
                                 <td>{{this.email}}</td>
                                 <td>{{this.gender}}</td>
                                 <td>{{this.address}}</td>
+                                <td><a href="/admin/viewVendor/{{this._id}}" class="btn btn-info text-white">View</a> </td>
                                 <td><a href="/admin/viewVendors/vendorOrders/{{this._id}}" class="btn btn-success">ORDERS</a></td>
                                 {{!-- <td><a href="" class="btn btn-info">CART</a></td> --}}
                                 {{#if this.isActive}}
