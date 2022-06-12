@@ -5,6 +5,7 @@ const { ObjectId } = require("mongodb");
 const orderHelper = require("../helpers/order-helper");
 const { getProductDetails } = require("../helpers/product-helper");
 const productHelper = require("../helpers/product-helper");
+const otpHelper=require('../helpers/otp-helper')
 var router = express.Router();
 var vendorHelper = require("../helpers/vendor-helper");
 const { route } = require("./users");
@@ -41,8 +42,29 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/vendorsignup", (req, res) => {
-  vendorHelper
-    .vendorSignup(req.body)
+  
+  const{email,phonenumber}=req.body
+  req.session.vendorNumber=phonenumber
+  req.session.vendorEmail=email
+  req.session.vendorWhole=req.body
+  otpHelper.makeOtp(phonenumber).then((verification)=>
+  console.log(verification))
+
+  
+  res.render('vendor/verification',{whole:req.session.vendorWhole})
+});
+
+router.post('/verify',(req,res)=>{
+  let{otp}=req.body
+  otp=otp.join("")
+  console.log(otp);
+  const phone_number=req.session.vendorNumber
+  otpHelper.verifyOtp(otp,phone_number).then((verification_check)=>{
+    if(verification_check.status=="approved"){
+      console.log("approved");
+      req.session.checkstatus=true
+      vendorHelper
+    .vendorSignup(req.session.vendorWhole)
     .then((response) => {
       console.log(response);
       res.redirect("/vendor/login");
@@ -51,7 +73,13 @@ router.post("/vendorsignup", (req, res) => {
       req.session.alreadyexistvendor = true;
       res.redirect("/vendor");
     });
-});
+    }else{
+      console.log('not approved');
+      res.redirect('/signup')
+    }
+  })
+})
+
 
 router.post("/vendorlogin", (req, res) => {
   vendorHelper.vendorLogin(req.body).then((response) => {
