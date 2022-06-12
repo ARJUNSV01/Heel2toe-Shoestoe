@@ -138,5 +138,15 @@ module.exports = {
       resolve()
     })
     
+  },withdrawals:(vendorId)=>{
+    return new Promise(async(resolve,reject)=>{
+    let withdrawals=  await db.get().collection(collection.ADMIN_COLLECTION).aggregate([
+        {$unwind:'$redeemRequests'},
+        {$match:{$and:[{'redeemRequests.vendorId':vendorId},{'redeemRequests.paymentStatus':true}]}},
+        {$project:{redeemRequests:1,_id:0}}
+      ]).toArray()
+      console.log(withdrawals);
+      resolve(withdrawals)
+    })
   }
 };

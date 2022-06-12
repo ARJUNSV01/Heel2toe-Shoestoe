@@ -138,20 +138,20 @@ module.exports = {
         {$project:{'orders.productDetails':1,_id:0}},
         
       ]).toArray()
-      let revenue=0
-      
+      console.log(products[0].orders)
+      let revenue=0,count=0,profit=0
+     
       for(let oneProduct of products){
       revenue=revenue+(oneProduct.orders.productDetails.total)
+        count++
+        profit+=oneProduct.orders.productDetails.total*0.1
       }
-     let orders= await db.get().collection(collection.USER_COLLECTION).aggregate([
-        {$unwind:'$orders'},
-        {$match:{'orders.status':'placed'}},
-        {$project:{orders:1,_id:0}}
-      ]).toArray()
-      let count=orders.length
+     
+      
       let response = {
         revenue: revenue,
-        count:count
+        count:count,
+        profit
       };
       resolve(response);
     })
@@ -167,16 +167,17 @@ await db.get().collection(collection.VENDOR_COLLECTION).updateOne({_id:ObjectId(
 {$inc:{claimedAmount:Number(amount)},
 $set:{redeemRequested:false}})
  await db.get().collection(collection.ADMIN_COLLECTION).updateOne({'redeemRequests.requestId':ObjectId(requestId)},
-  {$set:{'redeemRequests.$.paymentStatus':true}},{upsert:true})
+  {$set:{'redeemRequests.$.paymentStatus':true,'redeemRequests.$.paymentId':new ObjectId(),'redeemRequests.$.paidOn':new Date()}},{upsert:true})
   resolve()
  })
   },requestsCount:()=>{
     return new Promise(async(resolve,reject)=>{
       let requests=await db.get().collection(collection.ADMIN_COLLECTION).aggregate([
-        {$match:{'redeemRequests.paymentStatus':false}},
         {$unwind:'$redeemRequests'},
+        {$match:{'redeemRequests.paymentStatus':false}},
         {$project:{redeemRequests:1,_id:0}}
       ]).toArray()
+      console.log(requests);
      let count=requests.length
       resolve(count)
     })

@@ -56,6 +56,11 @@ router.get('/viewRedeemRequests',adminlogged,(req,res)=>{
     res.render('admin/viewRedeemRequests',{admin:true,requests})
   })
 })
+router.get('/paymentHistory',adminlogged,(req,res)=>{
+  adminHelper.viewRedeemRequests().then((requests)=>{
+    res.render('admin/paymentHistory',{admin:true,admintrue:req.session.admin,requests})
+  })
+})
 router.get('/payNow',(req,res)=>{
   const{vendorId,amount,requestId}=req.query
   adminHelper.payAmount(vendorId,amount,requestId).then(()=>{

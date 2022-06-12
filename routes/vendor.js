@@ -8,6 +8,7 @@ const productHelper = require("../helpers/product-helper");
 const otpHelper=require('../helpers/otp-helper')
 var router = express.Router();
 var vendorHelper = require("../helpers/vendor-helper");
+
 const { route } = require("./users");
 
 let verifyLogin = (req, res, next) => {
@@ -275,6 +276,11 @@ router.get("/viewOrders", verifyLogin, (req, res) => {
 //     });
 //   });
 // });
+router.get("/withdrawalHistory",verifyLogin,(req,res)=>{
+vendorHelper.withdrawals(req.session.vendor._id).then((withdrawals)=>{
+res.render('vendor/withdrawals',{vendor:true,vendorData:req.session.vendor,withdrawals})
+})
+})
 router.get("/shipOrder/:id", (req, res) => {
   orderHelper.shipOrder(req.params.id).then(() => {
     res.redirect("/vendor/viewOrders");
