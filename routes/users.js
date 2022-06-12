@@ -5,6 +5,7 @@ var router = express.Router();
 const userHelper = require("../helpers/user-helper");
 const cartHelper = require("../helpers/cart-helper");
 const orderHelper = require("../helpers/order-helper");
+const otpHelper=require('../helpers/otp-helper')
 const { ObjectId } = require("mongodb");
 var db = require("../config/connection");
 var collection = require("../config/collections");
@@ -55,8 +56,27 @@ router.get("/signup", (req, res) => {
   req.session.alreadyExist = false;
 });
 router.post("/signup", (req, res) => {
-  userHelper
-    .doSignup(req.body)
+  const{email,phonenumber}=req.body
+  req.session.number=phonenumber
+  req.session.email=email
+  req.session.whole=req.body
+  otpHelper.makeOtp(phonenumber).then((verification)=>
+  console.log(verification))
+
+  
+  res.render('user/verification',{whole:req.session.whole})
+});
+router.post('/verify',(req,res)=>{
+  let{otp}=req.body
+  otp=otp.join("")
+  console.log(otp);
+  const phone_number=req.session.number
+  otpHelper.verifyOtp(otp,phone_number).then((verification_check)=>{
+    if(verification_check.status=="approved"){
+      console.log("approved");
+      req.session.checkstatus=true
+      userHelper
+    .doSignup(req.session.whole)
     .then((response) => {
       console.log(response);
       res.redirect("/login");
@@ -65,7 +85,13 @@ router.post("/signup", (req, res) => {
       req.session.alreadyExist = true;
       res.redirect("/signup");
     });
-});
+    }else{
+      console.log('not approved');
+      res.redirect('/signup')
+    }
+  })
+})
+
 router.post("/login", (req, res) => {
   userHelper.doLogin(req.body).then((response) => {
     if (response.status) {
