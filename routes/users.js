@@ -9,10 +9,10 @@ const otpHelper=require('../helpers/otp-helper')
 const { ObjectId } = require("mongodb");
 var db = require("../config/connection");
 var collection = require("../config/collections");
+var nodemailer = require('nodemailer');
 const session = require("express-session");
-var menProducts;
-var searchKeyword;
-var searchResult;
+var menProducts,searchKeyword,searchResult
+
 let verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
@@ -368,7 +368,32 @@ router.post("/verify-payment",verifyLogin, (req, res) => {
       res.json({ status: false, errMsg: "payment failed" });
     });
 });
-router.get("/orderSuccess",verifyLogin, (req, res) => {
+router.get("/orderSuccess",verifyLogin,async(req, res) => {
+let orderedProducts = await orderHelper.getOrderedProducts(req.session.orderId)
+console.log(orderedProducts);
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'jcarl1998groove@gmail.com',
+      pass: 'ljcimkghynpodvgg'
+    }
+  });
+  
+  var mailOptions = {
+    from: 'jcarl1998groove@gmail.com',
+    to: 'arjunsv9@gmail.com',
+    subject: 'Your Heel2toe Order Confirmation',
+    html: `<h4>Your order of </h4> <h3>order id : ${orderedProducts.orderId}</h3><h4>of amount </h4><h3>Rs. ${orderedProducts.totalAmount}</h3>  <h4> placed on </h4> <h3>${orderedProducts.time}</h3><h4> has been confirmed & it will be shipped within 2 days.</h4>`
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+  
   res.render("user/paymentConf");
 });
 
