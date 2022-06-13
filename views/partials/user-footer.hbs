@@ -9,7 +9,7 @@
                             </div>
                             <div class="copywrite_text d-flex align-items-center">
                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | 
+{{!-- Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved |  --}}
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
                             </div>
                         </div>
@@ -18,11 +18,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     <div class="col-12 col-sm-6 col-md-3  col-lg-5">
                         <div class="single_footer_area">
                             <ul class="footer_widget_menu">
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">Faq</a></li>
-                                <li><a href="#">Returns</a></li>
-                                <li><a href="#">Contact</a></li>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/vendor">Become a Seller</a></li>
+                                <li><a href="/cart/{{userData._id}}">Cart</a></li>
+                                {{!-- <li><a href="#">Returns</a></li> --}}
+                                
                             </ul>
                         </div>
                     </div>
@@ -30,10 +30,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     <div class="col-12 col-sm-6 col-md-3 col-lg-2">
                         <div class="single_footer_area">
                             <ul class="footer_widget_menu">
-                                <li><a href="#">My Account</a></li>
-                                <li><a href="#">Shipping</a></li>
-                                <li><a href="#">Our Policies</a></li>
-                                <li><a href="#">Afiliates</a></li>
+                                <li><a href="/viewProfile/{{userData._id}}">Account</a></li>
+                                <li><a href="/viewOrders/{{userData._id}}">Orders</a></li>
+                                <li><a href="/cart/{{userData._id}}">Cart</a></li>
+                                <li><a href="/editProfile/{{userData._id}}">Edit Profile</a></li>
                             </ul>
                         </div>
                     </div>
@@ -55,15 +55,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 <div class="line"></div>
 
                 <!-- Footer Bottom Area Start -->
-                <div class="footer_bottom_area">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="footer_social_area text-center">
+                <div class="p-0 footer_bottom_area">
+                    <div class="p-0 row">
+                        <div class="p-0 col-12 text-center">
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | 
+                            {{!-- <div class="footer_social_area text-center">
                                 <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                                 <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                                 <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                                 <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

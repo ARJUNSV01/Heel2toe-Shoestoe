@@ -144,7 +144,7 @@ vendorHelper.redeemRequest(vendorId,balance,vendor).then(()=>{
   res.redirect('/vendor/home')
 })
 })
-router.get("/home/viewproducts", (req, res) => {
+router.get("/home/viewproducts",verifyLogin, (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
     productHelper.viewProducts(vendorData).then((products) => {
@@ -154,7 +154,7 @@ router.get("/home/viewproducts", (req, res) => {
     res.redirect("/vendor/login");
   }
 });
-router.get("/home/addproducts", (req, res) => {
+router.get("/home/addproducts",verifyLogin, (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
     res.render("vendor/add-product", { vendor: true, vendorData });
@@ -187,14 +187,14 @@ function addImage(image, n, id) {
   image.mv("public/images/productsImages/" + id + "(" + n + ")" + ".jpg");
 }
 
-router.get("/home/viewproducts/delete/:id", (req, res) => {
+router.get("/home/viewproducts/delete/:id",verifyLogin, (req, res) => {
   let productId = req.params.id;
   console.log(productId);
   productHelper.deleteProducts(req.session.vendor._id, productId).then(() => {
     res.redirect("/vendor/home/viewproducts");
   });
 });
-router.get("/home/viewproducts/edit/:id", (req, res) => {
+router.get("/home/viewproducts/edit/:id",verifyLogin, (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
     let productId = req.params.id;
@@ -227,7 +227,7 @@ router.post("/product/update/:id", (req, res) => {
     res.redirect("/vendor/home/viewproducts");
   });
 });
-router.get("/home/viewproducts/view/:id", (req, res) => {
+router.get("/home/viewproducts/view/:id",verifyLogin, (req, res) => {
   if (req.session.vendorLogged) {
     let vendorData = req.session.vendor;
     productHelper.getProductDetails(req.params.id).then((product) => {
@@ -281,12 +281,12 @@ vendorHelper.withdrawals(req.session.vendor._id).then((withdrawals)=>{
 res.render('vendor/withdrawals',{vendor:true,vendorData:req.session.vendor,withdrawals})
 })
 })
-router.get("/shipOrder/:id", (req, res) => {
+router.get("/shipOrder/:id",verifyLogin, (req, res) => {
   orderHelper.shipOrder(req.params.id).then(() => {
     res.redirect("/vendor/viewOrders");
   });
 });
-router.get("/deliverOrder/:id", (req, res) => {
+router.get("/deliverOrder/:id",verifyLogin, (req, res) => {
   orderHelper.deliverOrder(req.params.id).then(() => {
     res.redirect("/vendor/viewOrders");
   });

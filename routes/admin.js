@@ -89,7 +89,7 @@ router.get('/orderDetails/:id',adminlogged,(req,res)=>{
   });
 })
 
-router.get("/viewusers/deleteuser/:id", (req, res) => {
+router.get("/viewusers/deleteuser/:id",adminlogged, (req, res) => {
   let userId = req.params.id;
   adminHelper.deleteUser(userId).then((response) => {
     console.log(response);
@@ -97,7 +97,7 @@ router.get("/viewusers/deleteuser/:id", (req, res) => {
   });
 });
 
-router.get("/viewusers/blockuser/:id", (req, res) => {
+router.get("/viewusers/blockuser/:id",adminlogged, (req, res) => {
   let userId = req.params.id;
   adminHelper.blockUser(userId).then((response) => {
     console.log(response);
@@ -105,7 +105,7 @@ router.get("/viewusers/blockuser/:id", (req, res) => {
     res.redirect("/admin/viewusers");
   });
 });
-router.get("/viewusers/unBlockuser/:id", (req, res) => {
+router.get("/viewusers/unBlockuser/:id",adminlogged, (req, res) => {
   let userId = req.params.id;
   adminHelper.unBlockUser(userId).then((response) => {
     console.log(response);
@@ -129,7 +129,7 @@ router.get("/viewVendors",adminlogged, (req, res) => {
     res.redirect("/admin");
   }
 });
-router.get('/viewVendor/:id',(req,res)=>{
+router.get('/viewVendor/:id',adminlogged,(req,res)=>{
   let vendorData={
     _id:req.params.id
   }
@@ -145,14 +145,14 @@ router.get("/viewVendors/vendorOrders/:id",adminlogged ,(req, res) => {
     res.render('admin/vendor-orders',{admin:true,admintrue,orders})
   })
 });
-router.get("/vendorOrderDetails/:id", (req, res) => {
+router.get("/vendorOrderDetails/:id",adminlogged, (req, res) => {
   orderHelper.getOrderedProducts(req.params.id).then((orders) => {
     let admintrue=req.session.admin
     let productDetails = orders.productDetails;
     res.render("admin/vendor-order-details", { admin: true, orders, productDetails,admintrue });
   });
 });
-router.get("/viewVendors/blockVendor/:id", (req, res) => {
+router.get("/viewVendors/blockVendor/:id",adminlogged, (req, res) => {
   let vendorId = req.params.id;
   console.log('hi');
   adminHelper.blockVendor(vendorId).then((response) => {
@@ -161,7 +161,7 @@ router.get("/viewVendors/blockVendor/:id", (req, res) => {
     res.redirect("/admin/viewVendors");
   });
 });
-router.get("/viewVendors/unBlockVendor/:id", (req, res) => {
+router.get("/viewVendors/unBlockVendor/:id",adminlogged, (req, res) => {
   let vendorId = req.params.id;
   adminHelper.unBlockVendor(vendorId).then((response) => {
     console.log(response);

@@ -313,7 +313,7 @@ router.get("/checkout",verifyLogin, (req, res) => {
     }
   });
 });
-router.post("/updateAddress", async (req, res) => {
+router.post("/updateAddress",verifyLogin, async (req, res) => {
   let cart = await orderHelper.getCart(req.session.user._id);
   console.log(cart);
 
@@ -332,13 +332,13 @@ router.post("/updateAddress", async (req, res) => {
     }
   });
 });
-router.get("/addcount/:id", (req, res) => {
+router.get("/addcount/:id",verifyLogin, (req, res) => {
   let cartId = req.params.id;
   cartHelper.addQty(cartId).then(() => {
     res.json({ added: true });
   });
 });
-router.get("/subcount/:id", (req, res) => {
+router.get("/subcount/:id",verifyLogin, (req, res) => {
   let cartId = req.params.id;
   cartHelper.subQty(cartId).then(() => {
     res.json({ sub: true });
@@ -351,7 +351,7 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
-router.post("/verify-payment", (req, res) => {
+router.post("/verify-payment",verifyLogin, (req, res) => {
   console.log(req.body);
   orderHelper
     .verifyPayment(req.body)
@@ -450,7 +450,7 @@ router.get("/orderedItems/:id", verifyLogin, (req, res) => {
     }
   });
 });
-router.get("/cancelOrder", (req, res) => {
+router.get("/cancelOrder",verifyLogin, (req, res) => {
   const { orderId, cartId, productId, size, quantity } = req.query;
   console.log(false, req.query);
   orderHelper.cancelOrder(orderId, cartId).then(() => {
