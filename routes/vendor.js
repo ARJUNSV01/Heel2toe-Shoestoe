@@ -131,10 +131,11 @@ router.post("/updateprofile", verifyLogin, (req, res) => {
     res.json({ vendorUpdated: true });
   });
 });
-router.get("/home",verifyLogin, (req, res) => {
+router.get("/home",verifyLogin, async(req, res) => {
     let vendorData = req.session.vendor;
+  let value=await vendorHelper.DateValues(req.session.vendor._id)
     vendorHelper.getTotalRevenue(vendorData._id).then((response) => {
-      res.render("vendor/home", { vendorData, vendor: true, response });
+      res.render("vendor/home", { vendorData, vendor: true, response,value });
     });
 });
 router.get('/redeemRequest',verifyLogin,(req,res)=>{

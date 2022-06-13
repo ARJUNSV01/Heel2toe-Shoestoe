@@ -3,6 +3,7 @@ const { response } = require("express");
 var express = require("express");
 const session = require("express-session");
 var router = express.Router();
+var nodemailer = require('nodemailer');
 var adminHelper = require("../helpers/admin-helper");
 const orderHelper=require("../helpers/order-helper")
 const productHelper=require("../helpers/product-helper");
@@ -62,8 +63,31 @@ router.get('/paymentHistory',adminlogged,(req,res)=>{
   })
 })
 router.get('/payNow',(req,res)=>{
-  const{vendorId,amount,requestId}=req.query
+  const{vendorId,amount,requestId,time}=req.query
   adminHelper.payAmount(vendorId,amount,requestId).then(()=>{
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'jcarl1998groove@gmail.com',
+        pass: 'ljcimkghynpodvgg'
+      }
+    });
+    
+    var mailOptions = {
+      from: 'jcarl1998groove@gmail.com',
+      to: 'arjunsv9@gmail.com',
+      subject: 'Payment Confirmation',
+      // html: `<h4>Your order of </h4> <h3>order id : ${orderedProducts.orderId}</h3><h4>of amount </h4><h3>Rs. ${orderedProducts.totalAmount}</h3>  <h4> placed on </h4> <h3>${orderedProducts.time}</h3><h4> has been confirmed & it will be shipped within 2 days.</h4>`
+        html:`An amount of <b>Rs.${amount}</b> has been credited to your wallet. <h6>Time:${time}</h6>`
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
     res.redirect('/admin/viewRedeemRequests')
   })
 })

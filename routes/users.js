@@ -383,7 +383,8 @@ console.log(orderedProducts);
     from: 'jcarl1998groove@gmail.com',
     to: 'arjunsv9@gmail.com',
     subject: 'Your Heel2toe Order Confirmation',
-    html: `<h4>Your order of </h4> <h3>order id : ${orderedProducts.orderId}</h3><h4>of amount </h4><h3>Rs. ${orderedProducts.totalAmount}</h3>  <h4> placed on </h4> <h3>${orderedProducts.time}</h3><h4> has been confirmed & it will be shipped within 2 days.</h4>`
+    // html: `<h4>Your order of </h4> <h3>order id : ${orderedProducts.orderId}</h3><h4>of amount </h4><h3>Rs. ${orderedProducts.totalAmount}</h3>  <h4> placed on </h4> <h3>${orderedProducts.time}</h3><h4> has been confirmed & it will be shipped within 2 days.</h4>`
+    html: `Your order of order id:<b> ${orderedProducts.orderId}</b> of amount <b>Rs. ${orderedProducts.totalAmount}</b>   placed on  <b>${orderedProducts.time}</b> has been confirmed & it will be shipped within 2 days.`
   };
   
   transporter.sendMail(mailOptions, function(error, info){

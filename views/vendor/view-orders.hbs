@@ -87,10 +87,14 @@
                     {{#if this.orders.productDetails.cancelled}}
                 <p class="text-danger">Order Cancelled</p>
                 {{else}}
+                      {{#if this.orders.productDetails.shipped}}
                     {{#if this.orders.productDetails.delivered}}
                     <p>Delivered</p>
                     {{else}}
                     <a href="/vendor/deliverOrder/{{this.orders.productDetails.cartId}}" class="btn btn-success">Deliver</a>
+                    {{/if}}
+                    {{else}}
+                    <p class="">Yet to be shipped</p>
                     {{/if}}
                     {{/if}}
                 </td>

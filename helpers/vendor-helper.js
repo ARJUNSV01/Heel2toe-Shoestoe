@@ -101,7 +101,7 @@ module.exports = {
         ])
         .toArray();
         let vendor=await db.get().collection(collection.VENDOR_COLLECTION).findOne({_id:ObjectId(vendorId)})
-        let balance=await vendor.totalEarnings-vendor.claimedAmount
+        // let balance=await vendor.totalEarnings-vendor.claimedAmount
       let revenue = 0;
       let count = 0;
       for (let oneOrder of orders) {
@@ -109,7 +109,7 @@ module.exports = {
            count=count+oneOrder.orders.productDetails.quantity
        }
        
-      
+       let balance=await vendor.totalEarnings-vendor.claimedAmount
       let response = {
         revenue: revenue,
         count: count,
@@ -148,5 +148,67 @@ module.exports = {
       console.log(withdrawals);
       resolve(withdrawals)
     })
-  }
+  },DateValues:(vendorId)=>{
+    return new Promise(async(resolve,reject)=>{
+        // 2022-06-12T13:44:06.004+00:00
+        let values=await db.get().collection(collection.ADMIN_COLLECTION)
+        .findOne({'redeemRequests.vendorId':vendorId})
+        // .aggregate([
+        //     {
+        //         $unwind:'$redeemRequests'
+        //     },
+        //     {
+        //         $match: {'redeemRequests.requestTime':{'$gte':'2022-06-12T15:14:37.269+00:00'}}
+        //     },
+        //     {
+        //         $project:{redeemRequests:1}
+        //     }
+        // ]).toArray()
+        // console.log(values.redeemRequests);
+        // let date2=new Date('2022-06-12T15:14:37.269+00:00').setHours(0,0,0,0)
+        // for(let i in values.redeemRequests){
+        //     let reqDate=new Date(values.redeemRequests[i].requestTime).setHours(0,0,0,0)
+        //     if(reqDate<date2){
+        //         console.log(values.redeemRequests[i]);
+        //     }
+        //     console.log(reqDate);
+        // }
+        let today=new Date()
+        let d=today.getDate()
+        // console.log(today,a);
+        let days
+        if(d>=6){
+         days=[d-6,d-5,d-4,d-3,d-2,d-1,d]
+        }else{
+          days=[]
+        }
+        let data=values.redeemRequests
+        for(let i in data){
+          if(data[i].paidOn){
+            data[i].paidOn=data[i].paidOn.getDate()
+          }
+        }
+        // console.log(data);
+        let count=0,y=[],p=0,price=[]
+        for(let i in days){
+            count=0
+            p=0
+            for(let j in data){
+                if(days[i]==data[j].paidOn){
+                    count++
+                    p+=data[j].amount
+                }
+               
+            }
+            y.push(count)
+            price.push(p)
+        }
+        console.log(days,y,price);
+        let response={
+            days,
+            price
+        }
+        resolve(response)
+    })
+}
 };
