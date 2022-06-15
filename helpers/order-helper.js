@@ -7,9 +7,11 @@ const Razorpay = require("razorpay");
 const { resolve } = require("path");
 const { log } = require("console");
 const { reject } = require("bcrypt/promises");
+require('dotenv').config();
+
 var instance = new Razorpay({
-  key_id: "rzp_test_i7RAxm8pu7Dno0",
-  key_secret: "Um4oamHTKqJ3i9ucFTa4uez2",
+  key_id: process.env.RAZORPAY_ID,
+  key_secret: process.env.RAZORPAY_KEY,
 });
 
 module.exports = {

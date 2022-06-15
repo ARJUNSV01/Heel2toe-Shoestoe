@@ -2,6 +2,8 @@
 var express = require("express");
 let productHelper = require("../helpers/product-helper");
 var router = express.Router();
+require('dotenv').config();
+
 const userHelper = require("../helpers/user-helper");
 const cartHelper = require("../helpers/cart-helper");
 const orderHelper = require("../helpers/order-helper");
@@ -374,13 +376,13 @@ console.log(orderedProducts);
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'jcarl1998groove@gmail.com',
-      pass: 'ljcimkghynpodvgg'
+      user: process.env.NODEMAILER_USER,
+      pass: process.env.NODEMAILER_PASS
     }
   });
   
   var mailOptions = {
-    from: 'jcarl1998groove@gmail.com',
+    from: process.env.NODEMAILER_USER,
     to: 'arjunsv9@gmail.com',
     subject: 'Your Heel2toe Order Confirmation',
     // html: `<h4>Your order of </h4> <h3>order id : ${orderedProducts.orderId}</h3><h4>of amount </h4><h3>Rs. ${orderedProducts.totalAmount}</h3>  <h4> placed on </h4> <h3>${orderedProducts.time}</h3><h4> has been confirmed & it will be shipped within 2 days.</h4>`

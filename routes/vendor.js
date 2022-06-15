@@ -7,6 +7,7 @@ const { getProductDetails } = require("../helpers/product-helper");
 const productHelper = require("../helpers/product-helper");
 const otpHelper=require('../helpers/otp-helper')
 var router = express.Router();
+require('dotenv').config();
 var vendorHelper = require("../helpers/vendor-helper");
 
 const { route } = require("./users");
@@ -137,7 +138,9 @@ router.get("/home",verifyLogin, async(req, res) => {
     vendorHelper.getTotalRevenue(vendorData._id).then((response) => {
       res.render("vendor/home", { vendorData, vendor: true, response,value });
     });
+ 
 });
+
 router.get('/redeemRequest',verifyLogin,(req,res)=>{
 const{vendorId,balance}=req.query
 let vendor=req.session.vendor.firstname

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -26,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload())
-app.use(session({secret:'Key',cookie:{maxAge:600000}}))
+app.use(session({secret:'Key',cookie:{maxAge:60000000}}))
 app.use((req,res,next)=>{
 res.locals.session=req.session
 next()
@@ -47,6 +48,7 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -57,5 +59,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+// var http = require('http');
+// var server = http.createServer(app);
+// server.listen(3000);
 module.exports = app;
