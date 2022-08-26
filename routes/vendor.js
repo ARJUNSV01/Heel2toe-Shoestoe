@@ -136,7 +136,7 @@ router.get("/home",verifyLogin, async(req, res) => {
     let vendorData = req.session.vendor;
   let value=await vendorHelper.DateValues(req.session.vendor._id)
     vendorHelper.getTotalRevenue(vendorData._id).then((response) => {
-      res.render("vendor/home", { vendorData, vendor: true, response,value });
+      res.render("vendor/home", { vendorData, vendor: true, response,value});
     });
  
 });
@@ -168,7 +168,8 @@ router.get("/home/addproducts",verifyLogin, (req, res) => {
 });
 
 router.post("/home/addproducts", (req, res) => {
-  productHelper.addProducts(req.body, req.session.vendor._id).then((id) => {
+  productHelper.
+  addProducts(req.body, req.session.vendor._id).then((id) => {
     if (req.files) {
       if (req.files.image1) {
         addImage(req.files.image1, 1, id);
